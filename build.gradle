@@ -1,0 +1,162 @@
+plugins {
+    id 'checkstyle'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'com.jfrog.bintray' version '1.8.4'
+    id 'com.github.ben-manes.versions' version '0.20.0'
+    id 'java-library'
+    id 'maven'
+    id 'maven-publish'
+    id 'net.ltgt.apt' version '0.18'
+}
+
+group 'uk.gov.hmcts.reform'
+version '0.0.1'
+
+dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+        rules.all { ComponentSelection selection ->
+            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+            }
+            if (rejected) {
+                selection.reject('Release candidate')
+            }
+        }
+    }
+}
+
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '8.5'
+}
+
+sourceCompatibility = 1.8
+
+compileJava {
+    options.compilerArgs << '-parameters' << '-Xlint:deprecation'
+}
+
+compileTestJava {
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
+    }
+}
+
+task printVersion {
+    doLast {
+        print project.version
+    }
+}
+
+def gitRepo = "https://github.com/hmcts/idam-java-client"
+
+def pomConfig = {
+    licenses {
+        license {
+            name "MIT License"
+            url "http://www.opensource.org/licenses/mit-license.php"
+            distribution "repo"
+        }
+    }
+
+    scm {
+        url "https://github.com/hmcts/idam-java-client"
+    }
+}
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        Main(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId project.group
+            artifactId 'idam-client'
+            version project.version
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Idam client')
+                root.appendNode('name', 'Idam client')
+                root.appendNode('url', gitRepo)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['Main']
+    publish = true
+    pkg {
+        repo = 'hmcts-maven'
+        name = 'idam-client'
+        userOrg = 'hmcts'
+        licenses = ['MIT']
+        vcsUrl = gitRepo
+        version {
+            name = project.version
+        }
+    }
+}
+
+ext {
+    lombokVersion = '1.18.2'
+    springCloudVersion = 'Finchley.RELEASE'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    compile group: 'io.github.openfeign', name: 'feign-jackson'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+}
+
+wrapper {
+  distributionType = Wrapper.DistributionType.ALL
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
