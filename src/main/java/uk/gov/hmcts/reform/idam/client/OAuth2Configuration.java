@@ -15,9 +15,9 @@ public class OAuth2Configuration {
 
     @Autowired
     public OAuth2Configuration(
-            @Value("${idam.client.redirect_uri}") String redirectUri,
-            @Value("${idam.client.id}") String clientId,
-            @Value("${idam.client.secret}") String clientSecret
+            @Value("${idam.client.redirect_uri:}") String redirectUri,
+            @Value("${idam.client.id:}") String clientId,
+            @Value("${idam.client.secret:}") String clientSecret
     ) {
         this.clientId = clientId;
         this.redirectUri = redirectUri;
