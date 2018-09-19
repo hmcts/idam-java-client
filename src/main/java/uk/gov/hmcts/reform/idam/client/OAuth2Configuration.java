@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 public class OAuth2Configuration {
 
     private String clientId;
-    private String redirectUrl;
+    private String redirectUri;
     private String clientSecret;
 
     @Autowired
     public OAuth2Configuration(
-            @Value("${idam.client.redirect_url}") String redirectUrl,
+            @Value("${idam.client.redirect_uri}") String redirectUri,
             @Value("${idam.client.id}") String clientId,
             @Value("${idam.client.secret}") String clientSecret
     ) {
         this.clientId = clientId;
-        this.redirectUrl = redirectUrl;
+        this.redirectUri = redirectUri;
         this.clientSecret = clientSecret;
     }
 }

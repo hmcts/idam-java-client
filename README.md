@@ -13,7 +13,35 @@ This is a client library for interacting with the idam application.
 Just include the library as your dependency and you will be to use the client class.
 You will also need to set the spring configuration property of `idam.api.url` 
 
+Optionally if you are authenticating a user you can use provide client configuration:
+```yaml
+idam:
+  api:
+    url: http://localhost:8080
+  client:
+    id: client_id
+    secret: 123456
+    redirect_uri: https://localhost:3000/receiver 
 ```
+
+A client (IdamClient) is provided for interacting with the IdamApi feign client to simplify the log in flow:
+```java
+@Service
+class UserService {
+    private final IdamClient idamClient;
+    
+    UserService(IdamClient idamClient) {
+        this.idamClient = idamClient;
+    }
+    
+    public UserDetails authenticateUser(String username, String password) {
+        return idamClient.authenticateUser(username, password);
+    }
+    
+}
+
+```
+
 
 Components provided by this library will get automatically configured in a Spring context if `idam.api.url` configuration property is defined and does not equal `false`. 
 

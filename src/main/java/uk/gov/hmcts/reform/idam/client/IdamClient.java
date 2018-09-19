@@ -37,13 +37,13 @@ public class IdamClient {
                 BASIC_AUTH_TYPE + base64Authorisation,
                 AUTH_TYPE,
                 oauth2Configuration.getClientId(),
-                oauth2Configuration.getRedirectUrl()
+                oauth2Configuration.getRedirectUri()
         );
 
         TokenExchangeResponse tokenExchangeResponse = idamApi.exchangeCode(
                 authenticateUserResponse.getCode(),
                 GRANT_TYPE,
-                oauth2Configuration.getRedirectUrl(),
+                oauth2Configuration.getRedirectUri(),
                 oauth2Configuration.getClientId(),
                 oauth2Configuration.getClientSecret()
         );
