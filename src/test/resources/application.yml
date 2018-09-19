@@ -1,7 +1,6 @@
 ---
 idam:
   api:
-#    url: 'http://localhost:2020'
     url: 'http://localhost:${wiremock.server.port}'
   client:
     id: 'bsp'

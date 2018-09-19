@@ -155,7 +155,7 @@ dependencies {
     testImplementation 'ru.lanwen.wiremock:wiremock-junit5:1.2.0'
 
     testImplementation group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0'
-    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '2.0.1.RELEASE'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
 }
 
 wrapper {
