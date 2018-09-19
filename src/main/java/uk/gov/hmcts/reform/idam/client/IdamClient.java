@@ -29,7 +29,7 @@ public class IdamClient {
         return idamApi.retrieveUserDetails(bearerToken);
     }
 
-    public UserDetails authenticateUser(String username, String password) {
+    public String authenticateUser(String username, String password) {
         String authorisation = username + ":" + password;
         String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());
 
@@ -48,7 +48,6 @@ public class IdamClient {
                 oauth2Configuration.getClientSecret()
         );
 
-        String bearerToken = BEARER_AUTH_TYPE + tokenExchangeResponse.getAccessToken();
-        return idamApi.retrieveUserDetails(bearerToken);
+        return BEARER_AUTH_TYPE + tokenExchangeResponse.getAccessToken();
     }
 }
