@@ -1,0 +1,9 @@
+---
+idam:
+  api:
+#    url: 'http://localhost:2020'
+    url: 'http://localhost:${wiremock.server.port}'
+  client:
+    id: 'bsp'
+    secret: '123456'
+    redirect_uri: 'https://localhost/receiver'

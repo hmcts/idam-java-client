@@ -17,4 +17,9 @@ public class IdamClientAutoConfiguration {
     Decoder feignDecoder(ObjectMapper objectMapper) {
         return new JacksonDecoder(objectMapper);
     }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }

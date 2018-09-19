@@ -9,11 +9,10 @@ import lombok.Getter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenExchangeResponse {
 
-    @JsonProperty("access_token")
     private final String accessToken;
 
     @JsonCreator
-    public TokenExchangeResponse(String accessToken) {
+    public TokenExchangeResponse(@JsonProperty("access_token") String accessToken) {
         this.accessToken = accessToken;
     }
 

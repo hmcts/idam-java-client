@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.idam.client.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +12,7 @@ public class AuthenticateUserResponse {
     private String code;
 
     @JsonCreator
-    public AuthenticateUserResponse(String code) {
+    public AuthenticateUserResponse(@JsonProperty("code") String code) {
         this.code = code;
     }
 }

@@ -140,17 +140,30 @@ dependencyManagement {
 }
 
 dependencies {
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    compile group: 'io.github.openfeign', name: 'feign-jackson'
+    api group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
+    api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    api group: 'io.github.openfeign', name: 'feign-jackson'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.0'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.0'
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
+    testImplementation 'ru.lanwen.wiremock:wiremock-junit5:1.2.0'
+
+    testImplementation group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '2.0.1.RELEASE'
 }
 
 wrapper {
-  distributionType = Wrapper.DistributionType.ALL
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+test {
+    useJUnitPlatform()
 }
 
 bootJar {

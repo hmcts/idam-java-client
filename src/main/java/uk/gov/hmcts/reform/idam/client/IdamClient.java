@@ -34,7 +34,7 @@ public class IdamClient {
         String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());
 
         AuthenticateUserResponse authenticateUserResponse = idamApi.authenticateUser(
-                BASIC_AUTH_TYPE + base64Authorisation,
+                BASIC_AUTH_TYPE + " " + base64Authorisation,
                 AUTH_TYPE,
                 oauth2Configuration.getClientId(),
                 oauth2Configuration.getRedirectUri()
