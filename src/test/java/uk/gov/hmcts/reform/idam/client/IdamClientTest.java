@@ -28,6 +28,7 @@ class IdamClientTest {
     @Test
     @DisplayName("should return bearer token when successful")
     void authenticateUser() {
+        // user is configured in wiremock json file as should return successful
         String bearerToken = idamClient.authenticateUser("user@example.com", "Password12");
         assertThat(bearerToken).isNotEmpty();
     }
@@ -35,6 +36,7 @@ class IdamClientTest {
     @Test
     @DisplayName("should throw exception when unsuccessful authentication")
     void failedToAuthenticateUser() {
+        // user is configured in wiremock json file as should return 401
         FeignException exception = assertThrows(FeignException.class, () ->
                 idamClient.authenticateUser("anotheruser@example.com", "Password123")
         );
