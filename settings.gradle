@@ -1,1 +1,2 @@
 rootProject.name = 'idam-client'
+enableFeaturePreview('STABLE_PUBLISHING')

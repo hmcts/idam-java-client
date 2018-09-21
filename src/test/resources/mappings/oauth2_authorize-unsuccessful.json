@@ -1,0 +1,26 @@
+{
+  "id" : "335a8327-5ee2-4030-a05f-de3abd778031",
+  "name" : "oauth2_authorize",
+  "request" : {
+    "url" : "/oauth2/authorize?response_type=code&client_id=bsp&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver",
+    "method" : "POST",
+    "headers": {
+      "Authorization": {
+        "equalTo": "Basic YW5vdGhlcnVzZXJAZXhhbXBsZS5jb206UGFzc3dvcmQxMjM="
+      }
+    }
+  },
+  "response" : {
+    "status" : 401,
+    "body" : "{\"error\":\"Wrong user and/or password\",\"code\":\"INCORRECT_CREDENTIALS\"}",
+    "headers" : {
+      "X-Application-Context" : "application",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Sep 2018 15:35:36 GMT"
+    }
+  },
+  "uuid" : "335a8327-5ee2-4030-a05f-de3abd778031",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

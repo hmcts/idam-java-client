@@ -1,0 +1,26 @@
+{
+  "id" : "e3c087f5-1e25-419c-876b-5830e780b7e1",
+  "name" : "oauth2_authorize",
+  "request" : {
+    "url" : "/oauth2/authorize?response_type=code&client_id=bsp&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver",
+    "method" : "POST",
+    "headers": {
+      "Authorization": {
+          "equalTo": "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"code\":\"6GugDwpBcfq5E549\"}",
+    "headers" : {
+      "X-Application-Context" : "application",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Sep 2018 15:14:41 GMT"
+    }
+  },
+  "uuid" : "e3c087f5-1e25-419c-876b-5830e780b7e1",
+  "persistent" : true,
+  "insertionIndex" : 1
+}
