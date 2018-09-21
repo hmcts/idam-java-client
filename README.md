@@ -1,5 +1,8 @@
 # Idam java client
 
+[![Build Status](https://travis-ci.com/hmcts/idam-java-client.svg?branch=master)](https://travis-ci.com/hmcts/idam-java-client)
+[ ![Download](https://api.bintray.com/packages/hmcts/hmcts-maven/idam-client/images/download.svg) ](https://bintray.com/hmcts/hmcts-maven/idam-client/_latestVersion)
+
 This is a client library for interacting with the idam application.
 
 ## Getting started
