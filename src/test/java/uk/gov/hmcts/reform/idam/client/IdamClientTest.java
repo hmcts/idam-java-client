@@ -30,13 +30,13 @@ class IdamClientTest {
     void authenticateUser() {
         // user is configured in wiremock json file as should return successful
         String bearerToken = idamClient.authenticateUser("user@example.com", "Password12");
-        assertThat(bearerToken).isEqualTo("Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ2YjRrYTlwYW" +
-                "c5a2x2a3Bqczhqb241bDhrdCIsInN1YiI6IjMxIiwiaWF0IjoxNTM3MzcwMDgxLCJleHAiOjE1Mz" +
-                "czOTg4ODEsImRhdGEiOiJjYXNld29ya2VyLXNzY3MsY2FzZXdvcmtlcixjYXNld29ya2VyLXNzY3" +
-                "MtbG9hMSxjYXNld29ya2VyLWxvYTEiLCJ0eXBlIjoiQUNDRVNTIiwiaWQiOiIzMSIsImZvcmVuYW" +
-                "1lIjoiQ2FzZSIsInN1cm5hbWUiOiJXb3JrZXIiLCJkZWZhdWx0LXNlcnZpY2UiOiJDQ0QiLCJsb2" +
-                "EiOjEsImRlZmF1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvY2NkIiwiZ3JvdX" +
-                "AiOiJjYXNld29ya2VyIn0.F3qGuDsFb_8hgyFHMNjEow0RMTTaBz2VIuRTZpbVa80");
+        assertThat(bearerToken).isEqualTo("Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ2YjRrYTlwYW"
+                + "c5a2x2a3Bqczhqb241bDhrdCIsInN1YiI6IjMxIiwiaWF0IjoxNTM3MzcwMDgxLCJleHAiOjE1Mz"
+                + "czOTg4ODEsImRhdGEiOiJjYXNld29ya2VyLXNzY3MsY2FzZXdvcmtlcixjYXNld29ya2VyLXNzY3"
+                + "MtbG9hMSxjYXNld29ya2VyLWxvYTEiLCJ0eXBlIjoiQUNDRVNTIiwiaWQiOiIzMSIsImZvcmVuYW"
+                + "1lIjoiQ2FzZSIsInN1cm5hbWUiOiJXb3JrZXIiLCJkZWZhdWx0LXNlcnZpY2UiOiJDQ0QiLCJsb2"
+                + "EiOjEsImRlZmF1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvY2NkIiwiZ3JvdX"
+                + "AiOiJjYXNld29ya2VyIn0.F3qGuDsFb_8hgyFHMNjEow0RMTTaBz2VIuRTZpbVa80");
     }
 
     @Test
