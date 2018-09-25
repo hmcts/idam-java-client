@@ -14,7 +14,7 @@ public class IdamClient {
     public static final String AUTH_TYPE = "code";
     public static final String GRANT_TYPE = "authorization_code";
     public static final String BASIC_AUTH_TYPE = "Basic";
-    public static final String BEARER_AUTH_TYPE = "Basic";
+    public static final String BEARER_AUTH_TYPE = "Bearer";
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;
@@ -48,6 +48,6 @@ public class IdamClient {
                 oauth2Configuration.getClientSecret()
         );
 
-        return BEARER_AUTH_TYPE + tokenExchangeResponse.getAccessToken();
+        return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
     }
 }
