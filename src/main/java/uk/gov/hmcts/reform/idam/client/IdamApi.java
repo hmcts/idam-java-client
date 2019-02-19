@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.idam.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,11 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
+    /**
+     * This method accepts request body but it has to be always passed as " ".
+     * This is to ensure that spring cloud feign implementation adds a content length header
+     * which is required by Microsoft IIS server else it returns 411 Error back.
+     */
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/oauth2/authorize",
@@ -33,9 +39,15 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) final String authorisation,
         @RequestParam("response_type") final String responseType,
         @RequestParam("client_id") final String clientId,
-        @RequestParam("redirect_uri") final String redirectUri
+        @RequestParam("redirect_uri") final String redirectUri,
+        @RequestBody String requestBody
     );
 
+    /**
+     * This method accepts request body but it has to be always passed as " ".
+     * This is to ensure that spring cloud feign implementation adds a content length header
+     * which is required by Microsoft IIS server else it returns 411 Error back.
+     */
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/oauth2/token",
@@ -46,6 +58,7 @@ public interface IdamApi {
         @RequestParam("grant_type") final String grantType,
         @RequestParam("redirect_uri") final String redirectUri,
         @RequestParam("client_id") final String clientId,
-        @RequestParam("client_secret") final String clientSecret
+        @RequestParam("client_secret") final String clientSecret,
+        @RequestBody String requestBody
     );
 }
