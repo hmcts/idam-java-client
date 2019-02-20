@@ -50,13 +50,8 @@ public class IdamClient {
         authenticateUserReqBody.put(CLIENT_ID, clientId);
         authenticateUserReqBody.put(REDIRECT_URI, redirectUri);
 
-        AuthenticateUserResponse authenticateUserResponse = idamApi.authenticateUser(
-            BASIC_AUTH_TYPE + " " + base64Authorisation,
-            AUTH_TYPE,
-            clientId,
-            redirectUri,
-            authenticateUserReqBody.toString()
-        );
+        AuthenticateUserResponse authenticateUserResponse =
+            idamApi.authenticateUser(BASIC_AUTH_TYPE + " " + base64Authorisation, authenticateUserReqBody);
 
         Map<String, String> tokenExchangeReqBody = new HashMap<>();
         tokenExchangeReqBody.put(CODE, authenticateUserResponse.getCode());
@@ -65,15 +60,10 @@ public class IdamClient {
         tokenExchangeReqBody.put(CLIENT_ID, clientId);
         tokenExchangeReqBody.put(CLIENT_SECRET, oauth2Configuration.getClientSecret());
 
-        TokenExchangeResponse tokenExchangeResponse = idamApi.exchangeCode(
-            authenticateUserResponse.getCode(),
-            AUTHORIZATION_CODE,
-            redirectUri,
-            clientId,
-            oauth2Configuration.getClientSecret(),
-            tokenExchangeReqBody.toString()
-        );
+
+        TokenExchangeResponse tokenExchangeResponse = idamApi.exchangeCode(tokenExchangeReqBody);
 
         return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
     }
+
 }
