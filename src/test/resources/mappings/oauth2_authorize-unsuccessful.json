@@ -1,5 +1,5 @@
 {
-  "id" : "335a8327-5ee2-4030-a05f-de3abd778031",
+  "id" : "64953a35-55cb-4627-9702-4447c974c61a",
   "name" : "oauth2_authorize",
   "request" : {
     "url" : "/oauth2/authorize?response_type=code&client_id=bsp&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver",
@@ -8,7 +8,11 @@
       "Authorization": {
         "equalTo": "Basic YW5vdGhlcnVzZXJAZXhhbXBsZS5jb206UGFzc3dvcmQxMjM="
       }
-    }
+    },
+    "bodyPatterns" : [ {
+      "equalTo" : "{response_type=code, redirect_uri=https://localhost/receiver, client_id=bsp}",
+      "caseInsensitive" : false
+    } ]
   },
   "response" : {
     "status" : 401,
@@ -17,10 +21,12 @@
       "X-Application-Context" : "application",
       "Content-Type" : "application/json;charset=UTF-8",
       "Vary" : "Accept-Encoding",
-      "Date" : "Wed, 19 Sep 2018 15:35:36 GMT"
+      "Date" : "Wed, 20 Feb 2019 12:47:14 GMT"
     }
   },
-  "uuid" : "335a8327-5ee2-4030-a05f-de3abd778031",
+  "uuid" : "64953a35-55cb-4627-9702-4447c974c61a",
   "persistent" : true,
-  "insertionIndex" : 1
+  "scenarioName" : "scenario-oauth2-authorize",
+  "requiredScenarioState" : "scenario-oauth2-authorize-2",
+  "insertionIndex" : 4
 }

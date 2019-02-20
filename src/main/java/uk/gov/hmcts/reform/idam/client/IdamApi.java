@@ -25,11 +25,7 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
-    /**
-     * This method accepts request body but it has to be always passed as " ".
-     * This is to ensure that spring cloud feign implementation adds a content length header
-     * which is required by Microsoft IIS server else it returns 411 Error back.
-     */
+
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/oauth2/authorize",
@@ -43,11 +39,7 @@ public interface IdamApi {
         @RequestBody String requestBody
     );
 
-    /**
-     * This method accepts request body but it has to be always passed as " ".
-     * This is to ensure that spring cloud feign implementation adds a content length header
-     * which is required by Microsoft IIS server else it returns 411 Error back.
-     */
+
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/oauth2/token",

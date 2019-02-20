@@ -7,14 +7,22 @@ import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class IdamClient {
 
-    public static final String AUTH_TYPE = "code";
-    public static final String GRANT_TYPE = "authorization_code";
-    public static final String BASIC_AUTH_TYPE = "Basic";
-    public static final String BEARER_AUTH_TYPE = "Bearer";
+    private static final String CODE = "code";
+    private static final String AUTH_TYPE = CODE;
+    private static final String AUTHORIZATION_CODE = "authorization_code";
+    private static final String BASIC_AUTH_TYPE = "Basic";
+    private static final String BEARER_AUTH_TYPE = "Bearer";
+    private static final String RESPONSE_TYPE = "response_type";
+    private static final String CLIENT_ID = "client_id";
+    private static final String REDIRECT_URI = "redirect_uri";
+    private static final String CLIENT_SECRET = "client_secret";
+    private static final String GRANT_TYPE = "grant_type";
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;
@@ -33,21 +41,37 @@ public class IdamClient {
         String authorisation = username + ":" + password;
         String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());
 
+        String clientId = oauth2Configuration.getClientId();
+
+        String redirectUri = oauth2Configuration.getRedirectUri();
+
+        Map<String, String> authenticateUserReqBody = new HashMap<>();
+        authenticateUserReqBody.put(RESPONSE_TYPE, CODE);
+        authenticateUserReqBody.put(CLIENT_ID, clientId);
+        authenticateUserReqBody.put(REDIRECT_URI, redirectUri);
+
         AuthenticateUserResponse authenticateUserResponse = idamApi.authenticateUser(
             BASIC_AUTH_TYPE + " " + base64Authorisation,
             AUTH_TYPE,
-            oauth2Configuration.getClientId(),
-            oauth2Configuration.getRedirectUri(),
-            " "
+            clientId,
+            redirectUri,
+            authenticateUserReqBody.toString()
         );
+
+        Map<String, String> tokenExchangeReqBody = new HashMap<>();
+        tokenExchangeReqBody.put(CODE, authenticateUserResponse.getCode());
+        tokenExchangeReqBody.put(GRANT_TYPE, AUTHORIZATION_CODE);
+        tokenExchangeReqBody.put(REDIRECT_URI, redirectUri);
+        tokenExchangeReqBody.put(CLIENT_ID, clientId);
+        tokenExchangeReqBody.put(CLIENT_SECRET, oauth2Configuration.getClientSecret());
 
         TokenExchangeResponse tokenExchangeResponse = idamApi.exchangeCode(
             authenticateUserResponse.getCode(),
-            GRANT_TYPE,
-            oauth2Configuration.getRedirectUri(),
-            oauth2Configuration.getClientId(),
+            AUTHORIZATION_CODE,
+            redirectUri,
+            clientId,
             oauth2Configuration.getClientSecret(),
-            " "
+            tokenExchangeReqBody.toString()
         );
 
         return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
