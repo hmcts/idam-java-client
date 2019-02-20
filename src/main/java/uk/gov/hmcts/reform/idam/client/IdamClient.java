@@ -45,23 +45,11 @@ public class IdamClient {
 
         String redirectUri = oauth2Configuration.getRedirectUri();
 
-//        Map<String, String> authenticateUserReqBody = new HashMap<>();
-//        authenticateUserReqBody.put(RESPONSE_TYPE, CODE);
-//        authenticateUserReqBody.put(CLIENT_ID, clientId);
-//        authenticateUserReqBody.put(REDIRECT_URI, redirectUri);
-
-
         AuthenticateUserResponse authenticateUserResponse = idamApi.authenticateUser(
-                        BASIC_AUTH_TYPE + " " + base64Authorisation,
-                        new AuthenticateUserRequest(CODE, clientId, redirectUri)
-                );
+                BASIC_AUTH_TYPE + " " + base64Authorisation,
+                new AuthenticateUserRequest(CODE, clientId, redirectUri)
+        );
 
-//        Map<String, String> tokenExchangeReqBody = new HashMap<>();
-//        tokenExchangeReqBody.put(CODE, authenticateUserResponse.getCode());
-//        tokenExchangeReqBody.put(GRANT_TYPE, AUTHORIZATION_CODE);
-//        tokenExchangeReqBody.put(REDIRECT_URI, redirectUri);
-//        tokenExchangeReqBody.put(CLIENT_ID, clientId);
-//        tokenExchangeReqBody.put(CLIENT_SECRET, oauth2Configuration.getClientSecret());
 
         ExchangeCodeRequest exchangeCodeRequest = new ExchangeCodeRequest(authenticateUserResponse
                 .getCode(), AUTHORIZATION_CODE, redirectUri, clientId, oauth2Configuration.getClientSecret());
