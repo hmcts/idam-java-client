@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserRequest;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
+import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
-
-import java.util.Map;
 
 @FeignClient(name = "idam-api", url = "${idam.api.url}", configuration = CoreFeignConfiguration.class)
 public interface IdamApi {
@@ -34,7 +34,7 @@ public interface IdamApi {
     )
     AuthenticateUserResponse authenticateUser(
         @RequestHeader(HttpHeaders.AUTHORIZATION) final String authorisation,
-        @RequestBody Map<String, ?> requestBody
+        @RequestBody AuthenticateUserRequest authenticateUserRequest
     );
 
 
@@ -44,6 +44,6 @@ public interface IdamApi {
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     TokenExchangeResponse exchangeCode(
-        @RequestBody Map<String, ?> requestBody
+        @RequestBody ExchangeCodeRequest exchangeCodeRequest
     );
 }
