@@ -8,32 +8,32 @@ public class ExchangeCodeRequest {
     private String client_secret;
 
     public ExchangeCodeRequest(
-            String code, String grant_type, String redirect_uri, String client_id, String client_secret
+            String code, String grantType, String redirectUri, String clientId, String clientSecret
     ) {
         this.code = code;
-        this.grant_type = grant_type;
-        this.redirect_uri = redirect_uri;
-        this.client_id = client_id;
-        this.client_secret = client_secret;
+        this.grant_type = grantType;
+        this.redirect_uri = redirectUri;
+        this.client_id = clientId;
+        this.client_secret = clientSecret;
     }
 
     public String getCode() {
         return code;
     }
 
-    public String getGrant_type() {
+    public String getGrantType() {
         return grant_type;
     }
 
-    public String getRedirect_uri() {
+    public String getRedirectUri() {
         return redirect_uri;
     }
 
-    public String getClient_id() {
+    public String getClientId() {
         return client_id;
     }
 
-    public String getClient_secret() {
+    public String getClientSecret() {
         return client_secret;
     }
 }

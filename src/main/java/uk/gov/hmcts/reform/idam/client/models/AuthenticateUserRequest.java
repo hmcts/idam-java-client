@@ -5,21 +5,21 @@ public class AuthenticateUserRequest {
     private String client_id;
     private String redirect_uri;
 
-    public AuthenticateUserRequest(String response_type, String client_id, String redirect_uri) {
-        this.response_type = response_type;
-        this.client_id = client_id;
-        this.redirect_uri = redirect_uri;
+    public AuthenticateUserRequest(String responseType, String clientId, String redirectUri) {
+        this.response_type = responseType;
+        this.client_id = clientId;
+        this.redirect_uri = redirectUri;
     }
 
-    public String getResponse_type() {
+    public String getResponseType() {
         return response_type;
     }
 
-    public String getClient_id() {
+    public String getClientId() {
         return client_id;
     }
 
-    public String getRedirect_uri() {
+    public String getRedirectUri() {
         return redirect_uri;
     }
 }
