@@ -14,15 +14,9 @@ import java.util.Base64;
 public class IdamClient {
 
     private static final String CODE = "code";
-    private static final String AUTH_TYPE = CODE;
     private static final String AUTHORIZATION_CODE = "authorization_code";
     private static final String BASIC_AUTH_TYPE = "Basic";
     private static final String BEARER_AUTH_TYPE = "Bearer";
-    private static final String RESPONSE_TYPE = "response_type";
-    private static final String CLIENT_ID = "client_id";
-    private static final String REDIRECT_URI = "redirect_uri";
-    private static final String CLIENT_SECRET = "client_secret";
-    private static final String GRANT_TYPE = "grant_type";
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;
@@ -49,8 +43,7 @@ public class IdamClient {
                 BASIC_AUTH_TYPE + " " + base64Authorisation,
                 new AuthenticateUserRequest(CODE, clientId, redirectUri)
         );
-
-
+        
         ExchangeCodeRequest exchangeCodeRequest = new ExchangeCodeRequest(authenticateUserResponse
                 .getCode(), AUTHORIZATION_CODE, redirectUri, clientId, oauth2Configuration.getClientSecret());
 
