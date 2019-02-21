@@ -27,7 +27,9 @@
     <property name="eachLine" value="true"/>
   </module>
 
-  <module name="SuppressWarningsFilter" />
+  <module name="SuppressionFilter">
+    <property name="file" value="config/checkstyle/suppressions.xml"/>
+  </module>
   <module name="TreeWalker">
     <module name="UnusedImports"/>
     <module name="HideUtilityClassConstructor"/>

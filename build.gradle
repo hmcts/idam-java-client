@@ -28,7 +28,7 @@ dependencyUpdates.resolutionStrategy = {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.5'
+    toolVersion = '8.17'
 }
 
 sourceCompatibility = 1.8
