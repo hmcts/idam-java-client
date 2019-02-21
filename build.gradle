@@ -11,7 +11,7 @@ plugins {
 }
 
 group 'uk.gov.hmcts.reform'
-version '0.0.3'
+version '0.0.4'
 
 dependencyUpdates.resolutionStrategy = {
     componentSelection { rules ->
@@ -28,7 +28,7 @@ dependencyUpdates.resolutionStrategy = {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.5'
+    toolVersion = '8.17'
 }
 
 sourceCompatibility = 1.8
@@ -132,6 +132,7 @@ ext {
     lombokVersion = '1.18.2'
     springCloudVersion = 'Greenwich.RELEASE'
     feignVersion = '10.1.0'
+    feignFormVersion = '3.5.0'
 }
 
 dependencyManagement {
@@ -145,6 +146,7 @@ dependencies {
     api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     api group: 'io.github.openfeign', name: 'feign-jackson', version: feignVersion
     api group: 'io.github.openfeign', name: 'feign-httpclient', version: feignVersion
+    api group: 'io.github.openfeign.form', name: 'feign-form', version: feignFormVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion

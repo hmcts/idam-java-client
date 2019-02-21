@@ -1,26 +1,33 @@
 {
-  "id" : "e3c087f5-1e25-419c-876b-5830e780b7e1",
+  "id" : "93fd5bfc-ae51-47f8-a12d-07cf8e47b1cc",
   "name" : "oauth2_authorize",
   "request" : {
-    "url" : "/oauth2/authorize?response_type=code&client_id=bsp&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver",
+    "url" : "/oauth2/authorize",
     "method" : "POST",
     "headers": {
       "Authorization": {
-          "equalTo": "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy"
+        "equalTo": "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy"
       }
-    }
+    },
+    "bodyPatterns" : [ {
+      "equalTo" : "response_type=code&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver&client_id=bsp",
+      "caseInsensitive" : false
+    } ]
   },
   "response" : {
     "status" : 200,
-    "body" : "{\"code\":\"6GugDwpBcfq5E549\"}",
+    "body" : "{\"code\":\"eEdhNnasWy7eNFAV\"}",
     "headers" : {
       "X-Application-Context" : "application",
       "Content-Type" : "application/json;charset=UTF-8",
       "Vary" : "Accept-Encoding",
-      "Date" : "Wed, 19 Sep 2018 15:14:41 GMT"
+      "Date" : "Wed, 20 Feb 2019 20:49:39 GMT"
     }
   },
-  "uuid" : "e3c087f5-1e25-419c-876b-5830e780b7e1",
+  "uuid" : "93fd5bfc-ae51-47f8-a12d-07cf8e47b1cc",
   "persistent" : true,
-  "insertionIndex" : 1
+  "scenarioName" : "scenario-oauth2-authorize",
+  "requiredScenarioState" : "Started",
+  "newScenarioState" : "scenario-oauth2-authorize-2",
+  "insertionIndex" : 3
 }

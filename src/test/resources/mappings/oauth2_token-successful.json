@@ -1,21 +1,25 @@
 {
-  "id" : "8dc06854-c86c-4917-a010-6feae9eb885a",
+  "id" : "0b153d2e-cb62-4e65-90dc-839ece51f2e2",
   "name" : "oauth2_token",
   "request" : {
-    "url" : "/oauth2/token?code=6GugDwpBcfq5E549&grant_type=authorization_code&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver&client_id=bsp&client_secret=123456",
-    "method" : "POST"
+    "url" : "/oauth2/token",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "code=eEdhNnasWy7eNFAV&grant_type=authorization_code&redirect_uri=https%3A%2F%2Flocalhost%2Freceiver&client_secret=123456&client_id=bsp",
+      "caseInsensitive" : false
+    } ]
   },
   "response" : {
     "status" : 200,
-    "body" : "{\"access_token\":\"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ2YjRrYTlwYWc5a2x2a3Bqczhqb241bDhrdCIsInN1YiI6IjMxIiwiaWF0IjoxNTM3MzcwMDgxLCJleHAiOjE1MzczOTg4ODEsImRhdGEiOiJjYXNld29ya2VyLXNzY3MsY2FzZXdvcmtlcixjYXNld29ya2VyLXNzY3MtbG9hMSxjYXNld29ya2VyLWxvYTEiLCJ0eXBlIjoiQUNDRVNTIiwiaWQiOiIzMSIsImZvcmVuYW1lIjoiQ2FzZSIsInN1cm5hbWUiOiJXb3JrZXIiLCJkZWZhdWx0LXNlcnZpY2UiOiJDQ0QiLCJsb2EiOjEsImRlZmF1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvY2NkIiwiZ3JvdXAiOiJjYXNld29ya2VyIn0.F3qGuDsFb_8hgyFHMNjEow0RMTTaBz2VIuRTZpbVa80\",\"token_type\":\"Bearer\",\"expires_in\":28800}",
+    "body" : "{\"access_token\":\"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ1c2FubmJyaGV2OWI0dGxzMzhyMTI4dGdycCIsInN1YiI6IjI0IiwiaWF0IjoxNTUwNjk1Nzc5LCJleHAiOjE1NTA3MjQ1NzksImRhdGEiOiJjYXNld29ya2VyLXNzY3MsY2FzZXdvcmtlci1zc2NzLWxvYTAiLCJ0eXBlIjoiQUNDRVNTIiwiaWQiOiIyNCIsImZvcmVuYW1lIjoiQnVsayBTY2FuIiwic3VybmFtZSI6IlN5c3RlbSBVcGRhdGUiLCJkZWZhdWx0LXNlcnZpY2UiOiJCU1AiLCJsb2EiOjAsImRlZmF1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvYnNwIiwiZ3JvdXAiOiJic3Atc3lzdGVtdXBkYXRlIn0.PdjD2Kjz6myH1p44CRCVztkl2lqkg0LXqiyoH7Hs2bg\",\"token_type\":\"Bearer\",\"expires_in\":28800}",
     "headers" : {
       "X-Application-Context" : "application",
       "Content-Type" : "application/json;charset=UTF-8",
       "Vary" : "Accept-Encoding",
-      "Date" : "Wed, 19 Sep 2018 15:14:41 GMT"
+      "Date" : "Wed, 20 Feb 2019 20:49:39 GMT"
     }
   },
-  "uuid" : "8dc06854-c86c-4917-a010-6feae9eb885a",
+  "uuid" : "0b153d2e-cb62-4e65-90dc-839ece51f2e2",
   "persistent" : true,
-  "insertionIndex" : 2
+  "insertionIndex" : 4
 }
