@@ -1,11 +1,15 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class GeneratePinRequest {
 
     private final String firstName;
