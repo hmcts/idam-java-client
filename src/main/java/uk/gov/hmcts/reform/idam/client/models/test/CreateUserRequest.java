@@ -11,13 +11,19 @@ public class CreateUserRequest {
 
     public static final String DEFAULT_PASSWORD = "Password12";
 
-    private final String email;
-    private final String forename = "John";
-    private final String surname = "Smith";
-    private final Integer levelOfAccess = 0;
-    private final UserGroup userGroup;
-    private final List<UserRole> roles;
-    private final String activationDate = "";
-    private final String lastAccess = "";
-    private final String password = DEFAULT_PASSWORD;
+    private String email;
+    @Builder.Default
+    private String forename = "John";
+    @Builder.Default
+    private String surname = "Smith";
+    @Builder.Default
+    private Integer levelOfAccess = 0;
+    private UserGroup userGroup;
+    private List<UserRole> roles;
+    @Builder.Default
+    private String activationDate = "";
+    @Builder.Default
+    private String lastAccess = "";
+    @Builder.Default
+    private String password = DEFAULT_PASSWORD;
 }
