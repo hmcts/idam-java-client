@@ -148,6 +148,9 @@ dependencies {
     api group: 'io.github.openfeign', name: 'feign-httpclient', version: feignVersion
     api group: 'io.github.openfeign.form', name: 'feign-form', version: feignFormVersion
 
+    api group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.0.1'
+
+
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 

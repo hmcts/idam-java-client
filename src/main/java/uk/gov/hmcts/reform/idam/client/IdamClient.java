@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.idam.client;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserRequest;
@@ -20,14 +22,32 @@ public class IdamClient {
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;
+    private final JWKSource jwkSource;
+    private final JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256;
+
+    private ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
 
     @Autowired
-    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration) {
+    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration, @Value("idam.api.url") String idamApiUrl) {
         this.idamApi = idamApi;
         this.oauth2Configuration = oauth2Configuration;
+
+        try {
+            keySource = new RemoteJWKSet(new URL(idamApiUrl + "/jwks"));
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Invalid idam URL", e);
+        }
     }
 
     public UserDetails getUserDetails(String bearerToken) {
+        JWSKeySelector keySelector = new JWSVerificationKeySelector(expectedJWSAlg, jwkSource);
+        jwtProcessor.setJWSKeySelector(keySelector);
+// Process the token
+        SecurityContext ctx = null; // optional context parameter, not required here
+        JWTClaimsSet claimsSet = jwtProcessor.process(accessToken, ctx);
+
+        // TODO figure out next bit
+
         return idamApi.retrieveUserDetails(bearerToken);
     }
 
