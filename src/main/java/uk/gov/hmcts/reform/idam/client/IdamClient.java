@@ -16,10 +16,10 @@ import java.util.Base64;
 @Service
 public class IdamClient {
 
-    private static final String AUTH_TYPE = "code";
-    private static final String GRANT_TYPE = "authorization_code";
-    private static final String BASIC_AUTH_TYPE = "Basic";
-    private static final String BEARER_AUTH_TYPE = "Bearer";
+    public static final String AUTH_TYPE = "code";
+    public static final String GRANT_TYPE = "authorization_code";
+    public static final String BASIC_AUTH_TYPE = "Basic";
+    public static final String BEARER_AUTH_TYPE = "Bearer";
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;

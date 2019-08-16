@@ -16,6 +16,12 @@ public class GeneratePinRequest {
     @JsonInclude
     private final String lastName;
 
-    private final List<String> roles = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
+
+    public GeneratePinRequest(String name) {
+        this.firstName = name;
+        this.lastName = "";
+        this.roles = null;
+    }
 }
 

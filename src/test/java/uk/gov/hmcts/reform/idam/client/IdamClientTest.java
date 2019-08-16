@@ -48,4 +48,6 @@ class IdamClientTest {
 
         assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
+
+
 }
