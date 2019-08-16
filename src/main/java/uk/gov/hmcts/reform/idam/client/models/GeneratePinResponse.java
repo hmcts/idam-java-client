@@ -1,10 +1,12 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
 public class GeneratePinResponse {
 
     private final String pin;
@@ -14,5 +16,4 @@ public class GeneratePinResponse {
         this.pin = pin;
         this.userId = userId;
     }
-
 }

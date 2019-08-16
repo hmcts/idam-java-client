@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.idam.client;
 
+import feign.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserRequest;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
 import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
+import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
+import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
@@ -13,10 +16,10 @@ import java.util.Base64;
 @Service
 public class IdamClient {
 
-    public static final String AUTH_TYPE = "code";
-    public static final String GRANT_TYPE = "authorization_code";
-    public static final String BASIC_AUTH_TYPE = "Basic";
-    public static final String BEARER_AUTH_TYPE = "Bearer";
+    private static final String AUTH_TYPE = "code";
+    private static final String GRANT_TYPE = "authorization_code";
+    private static final String BASIC_AUTH_TYPE = "Basic";
+    private static final String BEARER_AUTH_TYPE = "Bearer";
 
     private IdamApi idamApi;
     private final OAuth2Configuration oauth2Configuration;
@@ -52,4 +55,15 @@ public class IdamClient {
         return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
     }
 
+    public TokenExchangeResponse exchangeCode(ExchangeCodeRequest exchangeCodeRequest) {
+        return idamApi.exchangeCode(exchangeCodeRequest);
+    }
+
+    public Response authenticatePinUser(String pin, String clientId, String redirectUrl, String state) {
+        return idamApi.authenticatePinUser(pin, clientId, redirectUrl, state);
+    }
+
+    public GeneratePinResponse generatePin(GeneratePinRequest pinRequest, String authorization) {
+        return idamApi.generatePin(pinRequest, authorization);
+    }
 }

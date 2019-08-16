@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.idam.client;
 
+import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserRequest;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
 import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
@@ -26,6 +28,17 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/pin",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    Response authenticatePinUser(
+        @RequestHeader("pin") final String pin,
+        @RequestParam("client_id") final String clientId,
+        @RequestParam("redirect_uri") final String redirectUri,
+        @RequestParam("state") final String state
+    );
 
     @RequestMapping(
         method = RequestMethod.POST,
