@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.idam.client;
 import feign.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserRequest;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
 import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
@@ -22,7 +24,7 @@ public class IdamClient {
     public static final String BEARER_AUTH_TYPE = "Bearer";
 
     private IdamApi idamApi;
-    private final OAuth2Configuration oauth2Configuration;
+    private OAuth2Configuration oauth2Configuration;
 
     @Autowired
     public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration) {
@@ -59,11 +61,24 @@ public class IdamClient {
         return idamApi.exchangeCode(exchangeCodeRequest);
     }
 
-    public Response authenticatePinUser(String pin, String clientId, String redirectUrl, String state) {
-        return idamApi.authenticatePinUser(pin, clientId, redirectUrl, state);
-    }
-
     public GeneratePinResponse generatePin(GeneratePinRequest pinRequest, String authorization) {
         return idamApi.generatePin(pinRequest, authorization);
+    }
+
+    public AuthenticateUserResponse authenticatePinUser(String pin, String clientId, String redirectUrl, String state) {
+        AuthenticateUserResponse pinUserCode;
+        Response response =  idamApi.authenticatePinUser(pin, clientId, redirectUrl, state);
+        String code = getCodeFromRedirect(response);
+        pinUserCode = new AuthenticateUserResponse(code);
+
+        return pinUserCode;
+    }
+
+    private String getCodeFromRedirect(Response response) {
+        String location = response.headers().get("Location").stream().findFirst()
+            .orElseThrow(IllegalArgumentException::new);
+
+        UriComponents build = UriComponentsBuilder.fromUriString(location).build();
+        return build.getQueryParams().getFirst("code");
     }
 }

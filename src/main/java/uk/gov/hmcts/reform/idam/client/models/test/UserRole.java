@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UserRole {
-    private final String code;
+    private String code;
 }
