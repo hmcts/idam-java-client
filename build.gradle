@@ -13,17 +13,19 @@ plugins {
 group 'uk.gov.hmcts.reform'
 version '1.1.1'
 
-dependencyUpdates.resolutionStrategy = {
-    componentSelection { rules ->
-        rules.all { ComponentSelection selection ->
-            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-            }
-            if (rejected) {
-                selection.reject('Release candidate')
-            }
+dependencyUpdates.resolutionStrategy {
+  componentSelection { rules ->
+    rules.all {
+      def isNonStable = { String version ->
+        ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+          version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
         }
+      }
+      if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+        selection.reject('Release candidate')
+      }
     }
+  }
 }
 
 checkstyle {
