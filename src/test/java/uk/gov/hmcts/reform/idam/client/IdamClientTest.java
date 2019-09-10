@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.idam.client;
 
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import feign.FeignException;
+import org.junit.Rule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     SpringExtension.class
 })
 @EnableAutoConfiguration
-@AutoConfigureWireMock
 class IdamClientTest {
+
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(5050);
 
     @Autowired
     private IdamClient idamClient;
@@ -47,5 +51,9 @@ class IdamClientTest {
         );
 
         assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    void stubForAuthenticateUser() {
+
     }
 }

@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.idam.client.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDetails {
 

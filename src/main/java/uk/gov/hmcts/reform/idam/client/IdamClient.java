@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.idam.client;
 
 import feign.Response;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
@@ -68,6 +69,9 @@ public class IdamClient {
     public AuthenticateUserResponse authenticatePinUser(String pin, String clientId, String redirectUrl, String state) {
         AuthenticateUserResponse pinUserCode;
         Response response =  idamApi.authenticatePinUser(pin, clientId, redirectUrl, state);
+        if (response.status() != HttpStatus.SC_OK) {
+            return null;
+        }
         String code = getCodeFromRedirect(response);
         pinUserCode = new AuthenticateUserResponse(code);
 
@@ -76,7 +80,7 @@ public class IdamClient {
 
     private String getCodeFromRedirect(Response response) {
         String location = response.headers().get("Location").stream().findFirst()
-            .orElseThrow(IllegalArgumentException::new);
+            .orElse("");
 
         UriComponents build = UriComponentsBuilder.fromUriString(location).build();
         return build.getQueryParams().getFirst("code");

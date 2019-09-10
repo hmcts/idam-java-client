@@ -1,8 +1,8 @@
 ---
 idam:
   api:
-    url: 'http://localhost:${wiremock.server.port}'
+    url: 'http://localhost:5050'
   client:
     id: 'bsp'
     secret: '123456'
-    redirect_uri: 'https://localhost/receiver'
+    redirect_uri: 'https://localhost:80/receiver'
