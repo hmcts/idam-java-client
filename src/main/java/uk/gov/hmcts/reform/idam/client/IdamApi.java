@@ -19,10 +19,19 @@ import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
 @FeignClient(name = "idam-api", url = "${idam.api.url}", configuration = CoreFeignConfiguration.class)
 public interface IdamApi {
-    @RequestMapping(method = RequestMethod.GET, value = "/details")
-    UserDetails retrieveUserDetails(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/pin")
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/details"
+    )
+    UserDetails retrieveUserDetails(
+        @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
+    );
+
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/pin"
+    )
     GeneratePinResponse generatePin(
         GeneratePinRequest requestBody,
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
@@ -49,7 +58,6 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) final String authorisation,
         @RequestBody AuthenticateUserRequest authenticateUserRequest
     );
-
 
     @RequestMapping(
         method = RequestMethod.POST,
