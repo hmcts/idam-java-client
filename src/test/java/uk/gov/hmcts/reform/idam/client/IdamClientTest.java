@@ -130,4 +130,15 @@ public class IdamClientTest {
             )
         );
     }
+
+    private void stubForPin() {
+        final String PIN_ENDPOINT = "/pin";
+        idamApiServer.stubFor(WireMock.post(PIN_ENDPOINT)
+            .willReturn(aResponse()
+                .withStatus(HttpStatus.OK.value())
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withBody(EXCHANGE_CODE_RESULT)
+            )
+        );
+    }
 }
