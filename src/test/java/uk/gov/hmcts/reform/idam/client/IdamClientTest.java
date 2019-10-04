@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.WireMockSpring;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
@@ -49,7 +50,10 @@ public class IdamClientTest {
     private final String EXCHNAGE_CODE = "eEdhNnasWy7eNFAV";
 
     @Rule
-    public WireMockClassRule idamApiServer = new WireMockClassRule(5050);
+    public WireMockClassRule idamApiServer = new WireMockClassRule(WireMockSpring
+        .options()
+        .port(5050)
+        .extensions(new ConnectionCloseExtension()));
 
     @Autowired
     private IdamClient idamClient;
