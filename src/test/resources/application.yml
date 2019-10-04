@@ -5,4 +5,4 @@ idam:
   client:
     id: 'bsp'
     secret: '123456'
-    redirect_uri: 'https://localhost:80/receiver'
+    redirect_uri: 'https://localhost:5000/receiver'
