@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.idam.client.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -16,12 +16,15 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDetails {
 
-    private final String id;
-    private final String email;
+    private String id;
+    private String email;
+    private String forename;
+    private String surname;
+    private List<String> roles;
 
-    private final String forename;
-    private final String surname;
-    private final List<String> roles;
+    public UserDetails() {
+        super();
+    }
 
     public UserDetails(
         String id,
@@ -38,6 +41,7 @@ public class UserDetails {
     }
 
 
+    @JsonIgnore
     public Optional<String> getSurname() {
         return Optional.ofNullable(surname);
     }

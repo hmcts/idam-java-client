@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
+@Builder
 public class ExchangeCodeRequest {
     private String code;
     private String grant_type;
