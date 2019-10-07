@@ -11,11 +11,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GeneratePinRequest {
+
     private final String firstName;
     @JsonInclude
     private final String lastName;
-
-    private List<String> roles;
+    private final List<String> roles;
 
     public GeneratePinRequest(String name) {
         this.firstName = name;
