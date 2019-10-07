@@ -1,9 +1,9 @@
 plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'org.springframework.boot' version '2.1.8.RELEASE'
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'com.github.ben-manes.versions' version '0.22.0'
+    id 'com.github.ben-manes.versions' version '0.25.0'
     id 'java-library'
     id 'maven'
     id 'maven-publish'
@@ -13,17 +13,19 @@ plugins {
 group 'uk.gov.hmcts.reform'
 version '1.2.0'
 
-dependencyUpdates.resolutionStrategy = {
-    componentSelection { rules ->
-        rules.all { ComponentSelection selection ->
-            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-            }
-            if (rejected) {
-                selection.reject('Release candidate')
-            }
+dependencyUpdates.resolutionStrategy {
+  componentSelection { rules ->
+    rules.all {
+      def isNonStable = { String version ->
+        ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+          version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
         }
+      }
+      if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+        selection.reject('Release candidate')
+      }
     }
+  }
 }
 
 checkstyle {
@@ -131,9 +133,10 @@ bintray {
 
 ext {
     lombokVersion = '1.18.8'
-    springCloudVersion = 'Greenwich.SR2'
+    springCloudVersion = 'Greenwich.SR3'
     feignVersion = '10.2.3'
     feignFormVersion = '3.5.0'
+    wiremockVersion = '2.24.1'
 }
 
 ext["spring-cloud-openfeign.version"] = "2.1.2.RELEASE"
@@ -154,13 +157,13 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.1'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
-    testCompile "com.github.tomakehurst:wiremock-jre8:2.24.1"
-    
+    testCompile group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
+
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
 }
 
