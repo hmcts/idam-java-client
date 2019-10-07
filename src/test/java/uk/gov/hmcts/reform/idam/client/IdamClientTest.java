@@ -58,9 +58,9 @@ public class IdamClientTest {
     private final String PIN_AUTH_CODE = "abcdefgh123456789";
     private final String PIN = "ABCD1234";
     private String PIN_REDIRECT_URL;
-    @Value("${idam.client.redirect_uri:}") String REDIRECT_URI;
-    @Value("${idam.client.id:}") String CLIENT_ID;
-    @Value("${idam.client.secret:}") String CLIENT_SECRET;
+    @Value("${idam.client.redirect_uri:}") private String REDIRECT_URI;
+    @Value("${idam.client.id:}") private String CLIENT_ID;
+    @Value("${idam.client.secret:}") private String CLIENT_SECRET;
 
     @Before
     public void setup() {

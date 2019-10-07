@@ -74,7 +74,8 @@ public class IdamClient {
     public AuthenticateUserResponse authenticatePinUser(String pin, String state) throws UnsupportedEncodingException {
         AuthenticateUserResponse pinUserCode;
         final String clientId = oauth2Configuration.getClientId();
-        final String redirectUri = URLEncoder.encode(oauth2Configuration.getRedirectUri(), StandardCharsets.UTF_8.toString());
+        final String redirectUri = URLEncoder.encode(
+            oauth2Configuration.getRedirectUri(), StandardCharsets.UTF_8.toString());
         final Response response =  idamApi.authenticatePinUser(pin, clientId, redirectUri, state);
         if (response.status() != HttpStatus.SC_OK) {
             return null;
