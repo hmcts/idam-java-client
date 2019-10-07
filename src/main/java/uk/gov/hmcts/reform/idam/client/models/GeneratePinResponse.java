@@ -9,8 +9,12 @@ import lombok.Getter;
 @Builder
 public class GeneratePinResponse {
 
-    private final String pin;
-    private final String userId;
+    private String pin;
+    private String userId;
+
+    public GeneratePinResponse() {
+        super();
+    }
 
     public GeneratePinResponse(String pin, String userId) {
         this.pin = pin;
