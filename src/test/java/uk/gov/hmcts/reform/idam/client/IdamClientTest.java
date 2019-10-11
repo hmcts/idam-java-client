@@ -183,7 +183,7 @@ public class IdamClientTest {
         final String PIN_ENDPOINT = String.format("/pin?client_id=%s&redirect_uri=%s&state", CLIENT_ID, redirectUri);
         idamApiServer.stubFor(WireMock.get(PIN_ENDPOINT)
             .willReturn(aResponse()
-                .withStatus(HttpStatus.OK.value())
+                .withStatus(HttpStatus.FOUND.value())
                 .withHeader(HttpHeaders.LOCATION, PIN_REDIRECT_URL)
             )
         );
