@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.idam.client;
 
 import feign.Response;
 import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -77,7 +77,7 @@ public class IdamClient {
         final String redirectUri = URLEncoder.encode(
             oauth2Configuration.getRedirectUri(), StandardCharsets.UTF_8.toString());
         final Response response =  idamApi.authenticatePinUser(pin, clientId, redirectUri, state);
-        if (response.status() != HttpStatus.SC_OK) {
+        if (response.status() != HttpStatus.FOUND.value()) {
             return null;
         }
         final String code = getCodeFromRedirect(response);
