@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -38,14 +37,11 @@ public class UserDetails {
         this.surname = surname;
         this.roles = roles;
     }
-
-
-    @JsonIgnore
+    
     public Optional<String> getSurname() {
         return Optional.ofNullable(surname);
     }
 
-    @JsonIgnore
     public String getFullName() {
         return getSurname().map(s -> String.join(" ", forename, s))
             .orElse(forename);

@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Scope;
 
 public class CoreFeignConfiguration {
     private int REQUEST_TIMEOUT = 10000;
-    
+
     @Autowired
     private ObjectFactory<HttpMessageConverters> messageConverters;
 
