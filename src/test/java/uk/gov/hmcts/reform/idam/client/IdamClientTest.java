@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.idam.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
@@ -62,9 +63,12 @@ public class IdamClientTest {
     @Value("${idam.client.id:}") private String CLIENT_ID;
     @Value("${idam.client.secret:}") private String CLIENT_SECRET;
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     @Before
     public void setup() {
         PIN_REDIRECT_URL = REDIRECT_URI + "?code=" + PIN_AUTH_CODE;
+        objectMapper.registerModule(new Jdk8Module());
     }
 
     @Rule
@@ -75,8 +79,6 @@ public class IdamClientTest {
 
     @Autowired
     private IdamClient idamClient;
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void authenticateUser() {
@@ -98,9 +100,16 @@ public class IdamClientTest {
 
     @Test
     public void findsDetailsForAuthToken() throws JsonProcessingException {
-        stubForDetails();
-        UserDetails userDetails = idamClient.getUserDetails(BEARER + TOKEN);
+        UserDetails userDetails = UserDetails.builder()
+            .email(USER_LOGIN)
+            .forename("Hello")
+            .surname("IDAM")
+            .build();
+        stubForDetails(userDetails);
+        UserDetails found = idamClient.getUserDetails(BEARER + TOKEN);
         assertThat(userDetails.getEmail()).isEqualTo(USER_LOGIN);
+        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo("IDAM"));
+        assertThat(found.getFullName()).isEqualTo("Hello IDAM");
     }
 
     @Test
@@ -153,9 +162,8 @@ public class IdamClientTest {
         );
     }
 
-    private void stubForDetails() throws JsonProcessingException {
+    private void stubForDetails(UserDetails userDetails) throws JsonProcessingException {
         final String DETAILS_ENDPOINT = "/details";
-        UserDetails userDetails = UserDetails.builder().email(USER_LOGIN).build();
         idamApiServer.stubFor(WireMock.get(DETAILS_ENDPOINT)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
