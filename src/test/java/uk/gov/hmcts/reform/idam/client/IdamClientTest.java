@@ -68,6 +68,8 @@ public class IdamClientTest {
     @Before
     public void setup() {
         PIN_REDIRECT_URL = REDIRECT_URI + "?code=" + PIN_AUTH_CODE;
+
+        // See https://www.baeldung.com/jackson-optional for why this is needed
         objectMapper.registerModule(new Jdk8Module());
     }
 
