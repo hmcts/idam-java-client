@@ -37,8 +37,7 @@ public class UserDetails {
         this.surname = surname;
         this.roles = roles;
     }
-
-
+    
     public Optional<String> getSurname() {
         return Optional.ofNullable(surname);
     }

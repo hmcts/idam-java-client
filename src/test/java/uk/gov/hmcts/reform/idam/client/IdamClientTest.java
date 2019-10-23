@@ -102,16 +102,18 @@ public class IdamClientTest {
 
     @Test
     public void findsDetailsForAuthToken() throws JsonProcessingException {
+        final String FORENAME = "Hello";
+        final String SURNAME = "IDAM";
         UserDetails userDetails = UserDetails.builder()
             .email(USER_LOGIN)
-            .forename("Hello")
-            .surname("IDAM")
+            .forename(FORENAME)
+            .surname(SURNAME)
             .build();
         stubForDetails(userDetails);
         UserDetails found = idamClient.getUserDetails(BEARER + TOKEN);
         assertThat(userDetails.getEmail()).isEqualTo(USER_LOGIN);
-        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo("IDAM"));
-        assertThat(found.getFullName()).isEqualTo("Hello IDAM");
+        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(SURNAME));
+        assertThat(found.getFullName()).isEqualTo(FORENAME + " " + SURNAME);
     }
 
     @Test
