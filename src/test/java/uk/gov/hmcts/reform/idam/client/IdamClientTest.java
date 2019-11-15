@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
+import com.google.common.collect.Lists;
 import feign.FeignException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,16 +28,19 @@ import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
 @SpringBootTest(classes = {IdamClient.class, IdamApi.class})
@@ -197,6 +201,46 @@ public class IdamClientTest {
             .willReturn(aResponse()
                 .withStatus(HttpStatus.FOUND.value())
                 .withHeader(HttpHeaders.LOCATION, PIN_REDIRECT_URL)
+            )
+        );
+    }
+
+    @Test
+    public void findsUserInfoForAuthToken() throws JsonProcessingException {
+        final String SUB = "hello-idam@reform.local";
+        final String UID = "hello-idam-01";
+        final String NAME = "Hello IDAM";
+        final String GIVEN_NAME = "Hello";
+        final String FAMILY_NAME = "IDAM";
+        final List<String> ROLES = Lists.newArrayList("citizen");
+
+        UserInfo userDetails = UserInfo.builder()
+            .sub(SUB)
+            .uid(UID)
+            .name(NAME)
+            .givenName(GIVEN_NAME)
+            .familyName(FAMILY_NAME)
+            .roles(ROLES)
+            .build();
+
+        stubForUserInfo(userDetails);
+
+        UserInfo found = idamClient.getUserInfo(BEARER + TOKEN);
+
+        assertThat(found.getSub()).isEqualTo(SUB);
+        assertThat(found.getUid()).isEqualTo(UID);
+        assertThat(found.getName()).isEqualTo(NAME);
+        assertThat(found.getGivenName()).isEqualTo(GIVEN_NAME);
+        assertThat(found.getFamilyName()).isEqualTo(FAMILY_NAME);
+        assertThat(found.getRoles()).isEqualTo(ROLES);
+    }
+
+    private void stubForUserInfo(UserInfo userInfo) throws JsonProcessingException {
+        idamApiServer.stubFor(WireMock.get("/o/userinfo")
+            .willReturn(aResponse()
+                .withStatus(HttpStatus.OK.value())
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .withBody(objectMapper.writeValueAsString(userInfo))
             )
         );
     }
