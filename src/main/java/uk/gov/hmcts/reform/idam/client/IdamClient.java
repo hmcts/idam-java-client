@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -92,5 +93,9 @@ public class IdamClient {
 
         UriComponents build = UriComponentsBuilder.fromUriString(location).build();
         return build.getQueryParams().getFirst(CODE);
+    }
+
+    public UserInfo getUserInfo(String bearerToken) {
+        return idamApi.retrieveUserInfo(bearerToken);
     }
 }

@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 @FeignClient(name = "idam-api", url = "${idam.api.url}", configuration = CoreFeignConfiguration.class)
 public interface IdamApi {
@@ -61,5 +62,12 @@ public interface IdamApi {
     )
     TokenExchangeResponse exchangeCode(
         @RequestBody ExchangeCodeRequest exchangeCodeRequest
+    );
+
+    @GetMapping(
+            value = "/o/userinfo"
+    )
+    UserInfo retrieveUserInfo(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 }
