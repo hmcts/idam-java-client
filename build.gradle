@@ -135,7 +135,7 @@ bintray {
 
 ext {
     lombokVersion = '1.18.8'
-    springCloudVersion = 'Greenwich.SR4'
+    springCloudVersion = 'Hoxton.SR1'
     feignVersion = '10.2.3'
     feignFormVersion = '3.5.0'
     wiremockVersion = '2.24.1'
