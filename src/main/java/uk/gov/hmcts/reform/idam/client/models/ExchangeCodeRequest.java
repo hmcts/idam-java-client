@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
@@ -7,19 +8,23 @@ import lombok.EqualsAndHashCode;
 @Builder
 public class ExchangeCodeRequest {
     private String code;
-    private String grant_type;
-    private String redirect_uri;
-    private String client_id;
-    private String client_secret;
+    @JsonProperty("grant_type")
+    private String grantType;
+    @JsonProperty("redirectUri")
+    private String redirectUri;
+    @JsonProperty("client_id")
+    private String clientId;
+    @JsonProperty("client_secret")
+    private String clientSecret;
 
     public ExchangeCodeRequest(
             String code, String grantType, String redirectUri, String clientId, String clientSecret
     ) {
         this.code = code;
-        this.grant_type = grantType;
-        this.redirect_uri = redirectUri;
-        this.client_id = clientId;
-        this.client_secret = clientSecret;
+        this.grantType = grantType;
+        this.redirectUri = redirectUri;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
     public String getCode() {
@@ -27,18 +32,18 @@ public class ExchangeCodeRequest {
     }
 
     public String getGrantType() {
-        return grant_type;
+        return grantType;
     }
 
     public String getRedirectUri() {
-        return redirect_uri;
+        return redirectUri;
     }
 
     public String getClientId() {
-        return client_id;
+        return clientId;
     }
 
     public String getClientSecret() {
-        return client_secret;
+        return clientSecret;
     }
 }
