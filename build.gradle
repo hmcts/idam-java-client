@@ -150,7 +150,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
-    testCompile group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
+    testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
 
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
 }
