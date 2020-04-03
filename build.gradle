@@ -14,6 +14,21 @@ def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?:
 group 'uk.gov.hmcts.reform'
 version buildNumber
 
+dependencyUpdates.resolutionStrategy {
+    componentSelection { rules ->
+        rules.all {
+            def isNonStable = { String version ->
+                ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+                    version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
+                }
+            }
+            if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+                selection.reject('Release candidate')
+            }
+        }
+    }
+}
+
 checkstyle {
     maxWarnings = 0
     toolVersion = '8.31'
