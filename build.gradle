@@ -4,6 +4,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'com.jfrog.bintray' version '1.8.4'
     id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'org.owasp.dependencycheck' version '5.3.2.1'
     id 'java-library'
     id 'maven'
     id 'maven-publish'
@@ -28,6 +29,19 @@ dependencyUpdates.resolutionStrategy {
       }
     }
   }
+}
+
+// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
+dependencyCheck {
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+    suppressionFile = 'config/owasp/suppressions.xml'
+
+    analyzers {
+        // Disable scanning of .NET related binaries
+        assemblyEnabled = false
+    }
 }
 
 checkstyle {
@@ -136,12 +150,9 @@ bintray {
 ext {
     lombokVersion = '1.18.8'
     springCloudVersion = 'Hoxton.SR3'
-    feignVersion = '10.2.3'
-    feignFormVersion = '3.5.0'
-    wiremockVersion = '2.24.1'
 }
 
-ext["spring-cloud-openfeign.version"] = "2.1.2.RELEASE"
+ext["spring-cloud-openfeign.version"] = "2.2.2.RELEASE"
 
 dependencyManagement {
     imports {
@@ -152,9 +163,8 @@ dependencyManagement {
 dependencies {
     api group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
     api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    api group: 'io.github.openfeign', name: 'feign-jackson', version: feignVersion
-    api group: 'io.github.openfeign', name: 'feign-httpclient', version: feignVersion
-    api group: 'io.github.openfeign.form', name: 'feign-form', version: feignFormVersion
+    api group: 'io.github.openfeign', name: 'feign-jackson', version: '10.9'
+    api group: 'io.github.openfeign', name: 'feign-httpclient', version: '10.9'
     api group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
@@ -166,9 +176,10 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
-    testCompile group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
-
-    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', {
+        exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
+    }
+    testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: '2.26.3'
 }
 
 wrapper {
