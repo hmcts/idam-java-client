@@ -1,25 +1,30 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AuthenticateUserRequest {
-    private String response_type;
-    private String client_id;
-    private String redirect_uri;
+    @JsonProperty("response_type")
+    private String responseType;
+    @JsonProperty("client_id")
+    private String clientId;
+    @JsonProperty("redirect_uri")
+    private String redirectUri;
 
     public AuthenticateUserRequest(String responseType, String clientId, String redirectUri) {
-        this.response_type = responseType;
-        this.client_id = clientId;
-        this.redirect_uri = redirectUri;
+        this.responseType = responseType;
+        this.clientId = clientId;
+        this.redirectUri = redirectUri;
     }
 
     public String getResponseType() {
-        return response_type;
+        return responseType;
     }
 
     public String getClientId() {
-        return client_id;
+        return clientId;
     }
 
     public String getRedirectUri() {
-        return redirect_uri;
+        return redirectUri;
     }
 }

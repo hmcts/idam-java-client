@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import uk.gov.hmcts.reform.idam.client.models.test.CreateUserRequest;
 
 /**
- * Client for interacting with idam's user manipulation API
+ * Client for interacting with idam's user manipulation API.
  * This is only enabled in non production environments
  */
 @FeignClient(
@@ -17,7 +17,7 @@ import uk.gov.hmcts.reform.idam.client.models.test.CreateUserRequest;
         configuration = CoreFeignConfiguration.class
 )
 public interface IdamTestApi {
-    @PostMapping(value = "/accounts", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "/accounts", consumes = {MediaType.APPLICATION_JSON_VALUE})
     void createUser(CreateUserRequest createUserRequest);
 
     @GetMapping("/accounts/pin/{letterHolderId}")
