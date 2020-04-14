@@ -39,7 +39,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
@@ -153,7 +152,7 @@ public class IdamClientTest {
             .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(AUTH_TOKEN))
             .willReturn(aResponse()
                 .withStatus(responseStatus.value())
-                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(SUCCESS_OAUTH_BODY)
             )
         );
@@ -164,7 +163,7 @@ public class IdamClientTest {
         idamApiServer.stubFor(WireMock.post(OAUTH2_TOKEN_ENDPOINT)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
-                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(EXCHANGE_CODE_RESULT)
             )
         );
@@ -175,7 +174,7 @@ public class IdamClientTest {
         idamApiServer.stubFor(WireMock.get(DETAILS_ENDPOINT)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
-                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(objectMapper.writeValueAsString(userDetails))
             )
         );
@@ -188,7 +187,7 @@ public class IdamClientTest {
             .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(TOKEN))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
-                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(objectMapper.writeValueAsString(pinResponse))
             )
         );

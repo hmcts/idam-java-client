@@ -5,7 +5,6 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.5'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'java-library'
-    id 'maven'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.21'
 }
@@ -16,24 +15,24 @@ group 'uk.gov.hmcts.reform'
 version buildNumber
 
 dependencyUpdates.resolutionStrategy {
-  componentSelection { rules ->
-    rules.all {
-      def isNonStable = { String version ->
-        ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
-          version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
+    componentSelection { rules ->
+        rules.all {
+            def isNonStable = { String version ->
+                ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+                    version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
+                }
+            }
+            if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+                selection.reject('Release candidate')
+            }
         }
-      }
-      if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
-        selection.reject('Release candidate')
-      }
     }
-  }
 }
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.22'
-
+    toolVersion = '8.31'
+    getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 sourceCompatibility = 1.8
@@ -81,12 +80,12 @@ def pomConfig = {
 
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    getArchiveClassifier().set('sources')
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    getArchiveClassifier().set('javadoc')
     from javadoc.destinationDir
 }
 
@@ -166,7 +165,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
-    testCompile group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
+    testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: wiremockVersion
 
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
 }
