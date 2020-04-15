@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -36,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -54,8 +56,27 @@ public class IdamClientTest {
         + "ayBTY2FuIiwic3VybmFtZSI6IlN5c3RlbSBVcGRhdGUiLCJkZWZhdWx0LXNlcnZpY2UiOiJCU1AiLCJsb2EiOjAsImRlZm"
         + "F1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvYnNwIiwiZ3JvdXAiOiJic3Atc3lzdGVtdXBkYXRlIn0.P"
         + "djD2Kjz6myH1p44CRCVztkl2lqkg0LXqiyoH7Hs2bg";
+    private final String REFRESH_TOKEN = "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwid2dJT1RBRm9qRTRyQymYmVLdTIsImFsZy"
+        + "I6IlJTMjU2In0eyJzdWIiOiJkaXZvcmNlLWJzcC1zeXN0ZW0tdXBkYXRlQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUx"
+        + "1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJmN2QwOGZmMC00MjU3LTQyNzMtOTE4Yy0wY2Y5MmYTI3"
+        + "Y2ItMTA0MTM3MjIiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDIuaW50"
+        + "ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoicmVmcmVzaF90b2tlbiIsInRva2Vu3R5cGUiOiJCZW"
+        + "EpVQst7LMVefQuZTkSD3KQ_YBnnKuicZc4mD-QLLOCY-InfC_P7Sf6ZloNiEX4H-WquApx9HLTHPNRsH3TNvJgWEJbRlpkE5dWcBe"
+        + "fyJdXaI5YUO6bNxmby3jkqRVUMe25nOwWMiOyqoZDg3ehMGJuSqMguQwMrg1kc8RB6ZtVugPctVgW_ffE9EYc3i8yfTqq8rUvxDJI"
+        +  "dCT4jkArwuitcvSmUg2XCTy_YoqdwQcGZD5vI3Wya1polA";
+    private final String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJraWQiOiIxZXIwV1J3Z0lPVEFGb2pFNHJDL2ZiZUt1M0k9IiwiYWxnIj"
+        + "oiUlMyNTYifQ.eyJhdF9oYXNoIjoibFpJWlg1M3BzRnVCZWlpMllLWTFBUSIsInN1YiI6ImRpdm9yY2UtYnNwLXN5c3RlbS11cGR"
+        + "hdGVAaG1jdHMubmV0IiwiYXVkaXRUcmFja2luZ0lkIjoiZjdkMDhmZjAtNDI1Ny00MjczLTkxOGMtMGNmOTJkZGEyN2NiEwNDEzN"
+        + "XQiOjE1ODY5NTI5NDB9.ZpCCIHT98QbKjNeJzALhwL2yjnHBbC4PLbGrrQaVi3thcZ5_TaGmSxcECTgpjGTESJbccvlDe7z1xihO"
+        + "Vmxt1h2dGD9dAPBYSR6G0LEP_N5MUUCahVMDQeSBawzwW54AOsm4wwd5UUV_Xn8tAvovt4g-iZQGwBsi6t_FTLLYiPzapL-12jKt"
+        + "oCKtFmyLlfcBXTLaPywi8oFfinCRaVQ83BiKtIXuImGrYN8WeZVtvZwAQzmHqA4PoDJBzOJWptL-Z63wVFoQZy2AHaFLcR_Yv07w";
     private final String EXCHANGE_CODE_RESULT = String.format(
         "{\"access_token\":\"%s\",\"token_type\":\"Bearer\",\"expires_in\":28800}", TOKEN);
+
+    private final String OPENID_TOKEN_RESULT = String.format(
+            "{\"access_token\":\"%s\",\"refresh_token\":\"%s\",\"id_token\":\"%s\",\"token_type\":\"Bearer\","
+                    + "\"scope\": \"openid\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
+
     private final String USER_LOGIN = "user@example.com";
     private final String USER_PASSWORD = "Password12";
     private final String EXCHANGE_CODE = "eEdhNnasWy7eNFAV";
@@ -144,6 +165,22 @@ public class IdamClientTest {
         assertThat(response.getCode()).isEqualTo(PIN_AUTH_CODE);
     }
 
+    @Test
+    public void getAccessToken() {
+        stubForOpenIdToken(HttpStatus.OK);
+        final TokenResponse tokenResponse = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
+        assertThat(tokenResponse.accessToken).isEqualTo(TOKEN);
+    }
+
+    @Test
+    public void failedGetAccessToken() {
+        stubForOpenIdToken(HttpStatus.UNAUTHORIZED);
+        FeignException exception = assertThrows(FeignException.class, () ->
+                idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD)
+        );
+
+        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
     private void stubForAuthenticateUser(HttpStatus responseStatus) {
         final String OAUTH2_AUTHORIZE_ENDPOINT = "/oauth2/authorize";
         final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
@@ -166,6 +203,19 @@ public class IdamClientTest {
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(EXCHANGE_CODE_RESULT)
             )
+        );
+    }
+
+    private void stubForOpenIdToken(HttpStatus responseStatus) {
+        final String OPENID_TOKEN_ENDPOINT = "/o/token";
+
+        idamApiServer.stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
+                .withHeader(CONTENT_TYPE, containing("application/x-www-form-urlencoded"))
+                .willReturn(aResponse()
+                        .withStatus(responseStatus.value())
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                        .withBody(OPENID_TOKEN_RESULT)
+                )
         );
     }
 

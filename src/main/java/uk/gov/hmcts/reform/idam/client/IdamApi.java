@@ -15,6 +15,8 @@ import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
+import uk.gov.hmcts.reform.idam.client.models.TokenRequest;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -64,4 +66,10 @@ public interface IdamApi {
     UserInfo retrieveUserInfo(
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
+
+    @PostMapping(
+            value = "/o/token",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    TokenResponse generateOpenIdToken(@RequestBody TokenRequest tokenRequest);
 }

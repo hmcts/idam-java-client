@@ -13,6 +13,8 @@ import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
+import uk.gov.hmcts.reform.idam.client.models.TokenRequest;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -26,6 +28,9 @@ public class IdamClient {
 
     public static final String AUTH_TYPE = "code";
     public static final String GRANT_TYPE = "authorization_code";
+    public static final String OPENID_GRANT_TYPE = "password";
+    public static final String OPENID_SCOPE = "openid";
+
     public static final String BASIC_AUTH_TYPE = "Basic";
     public static final String BEARER_AUTH_TYPE = "Bearer";
     public static final String CODE = "code";
@@ -41,6 +46,19 @@ public class IdamClient {
 
     public UserDetails getUserDetails(String bearerToken) {
         return idamApi.retrieveUserDetails(bearerToken);
+    }
+        public TokenResponse getAccessToken(String username, String password) {
+        TokenRequest tokenRequest = new TokenRequest(oauth2Configuration.getClientId(),
+                oauth2Configuration.getClientSecret(),
+                OPENID_GRANT_TYPE,
+                oauth2Configuration.getRedirectUri(),
+                username,
+                password,
+                OPENID_SCOPE,
+                null,
+                null
+        );
+        return idamApi.generateOpenIdToken(tokenRequest);
     }
 
     public String authenticateUser(String username, String password) {
