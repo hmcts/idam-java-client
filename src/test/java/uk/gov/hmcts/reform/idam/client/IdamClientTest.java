@@ -181,6 +181,7 @@ public class IdamClientTest {
 
         assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
+
     private void stubForAuthenticateUser(HttpStatus responseStatus) {
         final String OAUTH2_AUTHORIZE_ENDPOINT = "/oauth2/authorize";
         final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";

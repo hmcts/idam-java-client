@@ -47,17 +47,20 @@ public class IdamClient {
     public UserDetails getUserDetails(String bearerToken) {
         return idamApi.retrieveUserDetails(bearerToken);
     }
-        public TokenResponse getAccessToken(String username, String password) {
-        TokenRequest tokenRequest = new TokenRequest(oauth2Configuration.getClientId(),
-                oauth2Configuration.getClientSecret(),
-                OPENID_GRANT_TYPE,
-                oauth2Configuration.getRedirectUri(),
-                username,
-                password,
-                OPENID_SCOPE,
-                null,
-                null
-        );
+
+    public TokenResponse getAccessToken(String username, String password) {
+        TokenRequest tokenRequest =
+                new TokenRequest(
+                        oauth2Configuration.getClientId(),
+                        oauth2Configuration.getClientSecret(),
+                        OPENID_GRANT_TYPE,
+                        oauth2Configuration.getRedirectUri(),
+                        username,
+                        password,
+                        OPENID_SCOPE,
+                        null,
+                        null
+                );
         return idamApi.generateOpenIdToken(tokenRequest);
     }
 
