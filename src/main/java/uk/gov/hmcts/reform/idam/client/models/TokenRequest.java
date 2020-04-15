@@ -1,27 +1,27 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import feign.form.FormProperty;
 
 public class TokenRequest {
 
-    @JsonProperty("client_id")
-    public final String clientId;
-    @JsonProperty("client_secret")
-    public final String clientSecret;
-    @JsonProperty("grant_type")
-    public final String grantType;
-    @JsonProperty("redirect_uri")
-    public final String redirectUri;
-    @JsonProperty("username")
-    public final String username;
-    @JsonProperty("password")
-    public final String password;
-    @JsonProperty("scope")
-    public final String scope;
-    @JsonProperty("refresh_token")
-    public final String refreshToken;
-    @JsonProperty("code")
-    public final String code;
+    @FormProperty("client_id")
+    private String clientId;
+    @FormProperty("client_secret")
+    private String clientSecret;
+    @FormProperty("grant_type")
+    private String grantType;
+    @FormProperty("redirect_uri")
+    private String redirectUri;
+    @FormProperty("username")
+    private String username;
+    @FormProperty("password")
+    private String password;
+    @FormProperty("scope")
+    private String scope;
+    @FormProperty("refresh_token")
+    private String refreshToken;
+    @FormProperty("code")
+    private String code;
 
 
     public TokenRequest(
@@ -44,6 +44,42 @@ public class TokenRequest {
         this.scope = scope;
         this.refreshToken = refreshToken;
         this.code = code;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public String getGrantType() {
+        return grantType;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public String getCode() {
+        return code;
     }
 }
 

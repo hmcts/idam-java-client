@@ -38,9 +38,11 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
@@ -211,7 +213,10 @@ public class IdamClientTest {
         final String OPENID_TOKEN_ENDPOINT = "/o/token";
 
         idamApiServer.stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
-                .withHeader(CONTENT_TYPE, containing("application/x-www-form-urlencoded"))
+                .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
+                .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
+                        + "scope=openid&client_secret=123456&redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
+                        + "client_id=bsp&username=user%40example.com"))
                 .willReturn(aResponse()
                         .withStatus(responseStatus.value())
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
