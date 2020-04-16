@@ -50,17 +50,17 @@ public class IdamClient {
 
     public TokenResponse getAccessToken(String username, String password) {
         TokenRequest tokenRequest =
-                new TokenRequest(
-                        oauth2Configuration.getClientId(),
-                        oauth2Configuration.getClientSecret(),
-                        OPENID_GRANT_TYPE,
-                        oauth2Configuration.getRedirectUri(),
-                        username,
-                        password,
-                        OPENID_SCOPE,
-                        null,
-                        null
-                );
+            new TokenRequest(
+                oauth2Configuration.getClientId(),
+                oauth2Configuration.getClientSecret(),
+                OPENID_GRANT_TYPE,
+                oauth2Configuration.getRedirectUri(),
+                username,
+                password,
+                OPENID_SCOPE,
+                null,
+                null
+            );
         return idamApi.generateOpenIdToken(tokenRequest);
     }
 
@@ -93,12 +93,13 @@ public class IdamClient {
         return idamApi.generatePin(pinRequest, authorization);
     }
 
-    public AuthenticateUserResponse authenticatePinUser(String pin, String state) throws UnsupportedEncodingException {
+    public AuthenticateUserResponse authenticatePinUser(String pin, String state)
+        throws UnsupportedEncodingException {
         AuthenticateUserResponse pinUserCode;
         final String clientId = oauth2Configuration.getClientId();
         final String redirectUri = URLEncoder.encode(
             oauth2Configuration.getRedirectUri(), StandardCharsets.UTF_8.toString());
-        final Response response =  idamApi.authenticatePinUser(pin, clientId, redirectUri, state);
+        final Response response = idamApi.authenticatePinUser(pin, clientId, redirectUri, state);
         if (response.status() != HttpStatus.FOUND.value()) {
             return null;
         }

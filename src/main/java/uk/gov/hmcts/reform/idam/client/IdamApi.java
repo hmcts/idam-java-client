@@ -68,8 +68,8 @@ public interface IdamApi {
     );
 
     @PostMapping(
-            value = "/o/token",
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+        value = "/o/token",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     TokenResponse generateOpenIdToken(@RequestBody TokenRequest tokenRequest);
 }

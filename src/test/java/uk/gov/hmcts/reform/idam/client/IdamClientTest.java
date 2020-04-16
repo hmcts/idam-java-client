@@ -213,15 +213,13 @@ public class IdamClientTest {
         final String OPENID_TOKEN_ENDPOINT = "/o/token";
 
         idamApiServer.stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
-                .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
-                .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
-                        + "scope=openid&client_secret=123456&redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
-                        + "client_id=bsp&username=user%40example.com"))
-                .willReturn(aResponse()
-                        .withStatus(responseStatus.value())
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                        .withBody(OPENID_TOKEN_RESULT)
-                )
+            .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
+            .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
+                + "scope=openid&client_secret=123456&redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
+                + "client_id=bsp&username=user%40example.com"))
+            .willReturn(aResponse().withStatus(responseStatus.value())
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .withBody(OPENID_TOKEN_RESULT))
         );
     }
 

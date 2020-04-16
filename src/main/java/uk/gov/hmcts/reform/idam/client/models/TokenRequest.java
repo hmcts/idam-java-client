@@ -25,15 +25,15 @@ public class TokenRequest {
 
 
     public TokenRequest(
-            String clientId,
-            String clientSecret,
-            String grantType,
-            String redirectUri,
-            String username,
-            String password,
-            String scope,
-            String refreshToken,
-            String code
+        String clientId,
+        String clientSecret,
+        String grantType,
+        String redirectUri,
+        String username,
+        String password,
+        String scope,
+        String refreshToken,
+        String code
     ) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;

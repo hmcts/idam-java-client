@@ -12,12 +12,12 @@ public class TokenResponse {
     public final String tokenType;
 
     public TokenResponse(
-            @JsonProperty("access_token") String accessToken,
-            @JsonProperty("expires_in") String expiresIn,
-            @JsonProperty("id_token") String idToken,
-            @JsonProperty("refresh_token") String refreshToken,
-            @JsonProperty("scope") String scope,
-            @JsonProperty("token_type") String tokenType
+        @JsonProperty("access_token") String accessToken,
+        @JsonProperty("expires_in") String expiresIn,
+        @JsonProperty("id_token") String idToken,
+        @JsonProperty("refresh_token") String refreshToken,
+        @JsonProperty("scope") String scope,
+        @JsonProperty("token_type") String tokenType
     ) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
