@@ -100,7 +100,11 @@ public class IdamClientTest {
     @Test
     public void authenticateUser() {
         stubForAuthenticateUser(HttpStatus.OK);
-        stubForToken();
+        String requestBody = "code=eEdhNnasWy7eNFAV&"
+            + "grant_type=authorization_code&"
+            + "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
+            + "client_secret=123456&client_id=bsp";
+        stubForToken(requestBody);
         final String bearerToken = idamClient.authenticateUser(USER_LOGIN, USER_PASSWORD);
         assertThat(bearerToken).isEqualTo(BEARER + TOKEN);
     }
@@ -133,9 +137,15 @@ public class IdamClientTest {
 
     @Test
     public void exchangeCodeReturnsExpected() {
-        stubForToken();
+        stubForToken("code=eEdhNnasWy7eNFAV&grant_type=token&"
+            + "redirect_uri=http%3A%2F%2Fredirect&client_secret=secret&client_id=clientId_12");
         ExchangeCodeRequest exchangeCodeRequest = ExchangeCodeRequest.builder()
-            .code(EXCHANGE_CODE).build();
+            .code(EXCHANGE_CODE)
+            .clientId("clientId_12")
+            .grantType("token")
+            .redirectUri("http://redirect")
+            .clientSecret("secret")
+            .build();
         final TokenExchangeResponse response = idamClient.exchangeCode(exchangeCodeRequest);
         assertThat(response.getAccessToken()).isEqualTo(TOKEN);
     }
@@ -178,6 +188,9 @@ public class IdamClientTest {
         final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
         final String SUCCESS_OAUTH_BODY = "{\"code\":\"eEdhNnasWy7eNFAV\"}";
         idamApiServer.stubFor(WireMock.post(OAUTH2_AUTHORIZE_ENDPOINT)
+            .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
+            .withRequestBody(equalToIgnoreCase("response_type=code&"
+                + "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=bsp"))
             .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(AUTH_TOKEN))
             .willReturn(aResponse()
                 .withStatus(responseStatus.value())
@@ -187,9 +200,11 @@ public class IdamClientTest {
         );
     }
 
-    private void stubForToken() {
+    private void stubForToken(String requestBody) {
         final String OAUTH2_TOKEN_ENDPOINT = "/oauth2/token";
         idamApiServer.stubFor(WireMock.post(OAUTH2_TOKEN_ENDPOINT)
+            .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
+            .withRequestBody(equalToIgnoreCase(requestBody))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

@@ -1,20 +1,22 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import feign.form.FormProperty;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @EqualsAndHashCode
 @Builder
+@Getter
 public class ExchangeCodeRequest {
     private String code;
-    @JsonProperty("grant_type")
+    @FormProperty("grant_type")
     private String grantType;
-    @JsonProperty("redirectUri")
+    @FormProperty("redirect_uri")
     private String redirectUri;
-    @JsonProperty("client_id")
+    @FormProperty("client_id")
     private String clientId;
-    @JsonProperty("client_secret")
+    @FormProperty("client_secret")
     private String clientSecret;
 
     public ExchangeCodeRequest(
@@ -25,25 +27,5 @@ public class ExchangeCodeRequest {
         this.redirectUri = redirectUri;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getGrantType() {
-        return grantType;
-    }
-
-    public String getRedirectUri() {
-        return redirectUri;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getClientSecret() {
-        return clientSecret;
     }
 }
