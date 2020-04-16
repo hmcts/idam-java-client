@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
 import feign.form.FormProperty;
+import lombok.Getter;
 
+@Getter
 public class TokenRequest {
 
     @FormProperty("client_id")
@@ -46,41 +48,6 @@ public class TokenRequest {
         this.code = code;
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    public String getGrantType() {
-        return grantType;
-    }
-
-    public String getRedirectUri() {
-        return redirectUri;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public String getCode() {
-        return code;
-    }
 }
 
 

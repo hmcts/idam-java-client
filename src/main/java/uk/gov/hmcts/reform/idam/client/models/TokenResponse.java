@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenResponse {
 
     public final String accessToken;
