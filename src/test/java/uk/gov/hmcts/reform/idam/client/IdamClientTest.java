@@ -54,22 +54,14 @@ public class IdamClientTest {
     private final String BEARER = "Bearer ";
     private final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ1c2FubmJyaGV2OWI0dGxzMzhy"
         + "MTI4dGdycCIsInN1YiI6IjI0IiwiaWF0IjoxNTUwNjk1Nzc5LCJleHAiOjE1NTA3MjQ1NzksImRhdGEiOiJjYXNld29ya2"
-        + "VyLXNzY3MsY2FzZXdvcmtlci1zc2NzLWxvYTAiLCJ0eXBlIjoiQUNDRVNTIiwiaWQiOiIyNCIsImZvcmVuYW1lIjoiQnVs"
-        + "ayBTY2FuIiwic3VybmFtZSI6IlN5c3RlbSBVcGRhdGUiLCJkZWZhdWx0LXNlcnZpY2UiOiJCU1AiLCJsb2EiOjAsImRlZm"
         + "F1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvYnNwIiwiZ3JvdXAiOiJic3Atc3lzdGVtdXBkYXRlIn0.P"
         + "djD2Kjz6myH1p44CRCVztkl2lqkg0LXqiyoH7Hs2bg";
     private final String REFRESH_TOKEN = "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwid2dJT1RBRm9qRTRyQymYmVLdTIsImFsZy"
         + "I6IlJTMjU2In0eyJzdWIiOiJkaXZvcmNlLWJzcC1zeXN0ZW0tdXBkYXRlQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUx"
-        + "1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJmN2QwOGZmMC00MjU3LTQyNzMtOTE4Yy0wY2Y5MmYTI3"
-        + "Y2ItMTA0MTM3MjIiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDIuaW50"
-        + "ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoicmVmcmVzaF90b2tlbiIsInRva2Vu3R5cGUiOiJCZW"
-        + "EpVQst7LMVefQuZTkSD3KQ_YBnnKuicZc4mD-QLLOCY-InfC_P7Sf6ZloNiEX4H-WquApx9HLTHPNRsH3TNvJgWEJbRlpkE5dWcBe"
         + "fyJdXaI5YUO6bNxmby3jkqRVUMe25nOwWMiOyqoZDg3ehMGJuSqMguQwMrg1kc8RB6ZtVugPctVgW_ffE9EYc3i8yfTqq8rUvxDJI"
         +  "dCT4jkArwuitcvSmUg2XCTy_YoqdwQcGZD5vI3Wya1polA";
     private final String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJraWQiOiIxZXIwV1J3Z0lPVEFGb2pFNHJDL2ZiZUt1M0k9IiwiYWxnIj"
         + "oiUlMyNTYifQ.eyJhdF9oYXNoIjoibFpJWlg1M3BzRnVCZWlpMllLWTFBUSIsInN1YiI6ImRpdm9yY2UtYnNwLXN5c3RlbS11cGR"
-        + "hdGVAaG1jdHMubmV0IiwiYXVkaXRUcmFja2luZ0lkIjoiZjdkMDhmZjAtNDI1Ny00MjczLTkxOGMtMGNmOTJkZGEyN2NiEwNDEzN"
-        + "XQiOjE1ODY5NTI5NDB9.ZpCCIHT98QbKjNeJzALhwL2yjnHBbC4PLbGrrQaVi3thcZ5_TaGmSxcECTgpjGTESJbccvlDe7z1xihO"
         + "Vmxt1h2dGD9dAPBYSR6G0LEP_N5MUUCahVMDQeSBawzwW54AOsm4wwd5UUV_Xn8tAvovt4g-iZQGwBsi6t_FTLLYiPzapL-12jKt"
         + "oCKtFmyLlfcBXTLaPywi8oFfinCRaVQ83BiKtIXuImGrYN8WeZVtvZwAQzmHqA4PoDJBzOJWptL-Z63wVFoQZy2AHaFLcR_Yv07w";
     private final String EXCHANGE_CODE_RESULT = String.format(
