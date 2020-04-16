@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.idam.client.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import feign.form.FormProperty;
 
 public class AuthenticateUserRequest {
-    @JsonProperty("response_type")
+    @FormProperty("response_type")
     private String responseType;
-    @JsonProperty("client_id")
+    @FormProperty("client_id")
     private String clientId;
-    @JsonProperty("redirect_uri")
+    @FormProperty("redirect_uri")
     private String redirectUri;
 
     public AuthenticateUserRequest(String responseType, String clientId, String redirectUri) {
