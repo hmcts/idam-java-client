@@ -27,7 +27,6 @@ import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
-import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -169,8 +168,8 @@ public class IdamClientTest {
     @Test
     public void getAccessToken() {
         stubForOpenIdToken(HttpStatus.OK);
-        final TokenResponse tokenResponse = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
-        assertThat(tokenResponse.accessToken).isEqualTo(TOKEN);
+        final String token = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
+        assertThat(token).isEqualTo(TOKEN);
     }
 
     @Test
