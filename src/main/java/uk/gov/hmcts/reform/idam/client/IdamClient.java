@@ -64,6 +64,7 @@ public class IdamClient {
         return idamApi.generateOpenIdToken(tokenRequest);
     }
 
+    @Deprecated
     public String authenticateUser(String username, String password) {
         String authorisation = username + ":" + password;
         String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());

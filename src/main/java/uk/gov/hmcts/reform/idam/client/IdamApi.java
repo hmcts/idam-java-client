@@ -49,6 +49,7 @@ public interface IdamApi {
         value = "/oauth2/authorize",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
+    @Deprecated
     AuthenticateUserResponse authenticateUser(
         @RequestHeader(HttpHeaders.AUTHORIZATION) final String authorisation,
         @RequestBody AuthenticateUserRequest authenticateUserRequest
