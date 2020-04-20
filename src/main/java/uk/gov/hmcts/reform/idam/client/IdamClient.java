@@ -64,24 +64,7 @@ public class IdamClient {
     }
 
     public String authenticateUser(String username, String password) {
-        String authorisation = username + ":" + password;
-        String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());
-
-        String clientId = oauth2Configuration.getClientId();
-
-        String redirectUri = oauth2Configuration.getRedirectUri();
-
-        AuthenticateUserResponse authenticateUserResponse = idamApi.authenticateUser(
-            BASIC_AUTH_TYPE + " " + base64Authorisation,
-            new AuthenticateUserRequest(AUTH_TYPE, clientId, redirectUri)
-        );
-
-        ExchangeCodeRequest exchangeCodeRequest = new ExchangeCodeRequest(authenticateUserResponse
-            .getCode(), GRANT_TYPE, redirectUri, clientId, oauth2Configuration.getClientSecret());
-
-        TokenExchangeResponse tokenExchangeResponse = idamApi.exchangeCode(exchangeCodeRequest);
-
-        return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
+       return getAccessToken(username, password);
     }
 
     public TokenExchangeResponse exchangeCode(ExchangeCodeRequest exchangeCodeRequest) {
