@@ -1,8 +1,14 @@
 package uk.gov.hmcts.reform.idam.client;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Expiry;
 import feign.Response;
 import org.apache.http.HttpHeaders;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
@@ -14,6 +20,7 @@ import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenRequest;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -21,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class IdamClient {
@@ -37,10 +45,21 @@ public class IdamClient {
     private IdamApi idamApi;
     private OAuth2Configuration oauth2Configuration;
 
+    private static Cache<String, TokenResponse> accessTokenCache;
+    private final long refreshTokenBeforeExpiry;
+    private final boolean  enableCache;
+
     @Autowired
-    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration) {
+    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration,
+        @Value("${idam.client.enable-cache:false}") boolean enableCache,
+        @Value("${idam.client.refresh-before-expire-in-sec:120}") long refreshTokenBeforeExpiry) {
         this.idamApi = idamApi;
         this.oauth2Configuration = oauth2Configuration;
+        this.enableCache = enableCache;
+        this.refreshTokenBeforeExpiry = refreshTokenBeforeExpiry;
+        this.accessTokenCache = Caffeine.newBuilder()
+            .expireAfter(new AccessTokenCacheExpiry())
+            .build();
     }
 
     public UserDetails getUserDetails(String bearerToken) {
@@ -48,6 +67,16 @@ public class IdamClient {
     }
 
     public String getAccessToken(String username, String password) {
+        if (enableCache) {
+            return
+                accessTokenCache
+                    .get(username, b -> retrieveAccessToken(username, password)).accessToken;
+        } else {
+            return retrieveAccessToken(username, password).accessToken;
+        }
+    }
+
+    public TokenResponse retrieveAccessToken(String username, String password) {
         TokenRequest tokenRequest =
             new TokenRequest(
                 oauth2Configuration.getClientId(),
@@ -60,7 +89,7 @@ public class IdamClient {
                 null,
                 null
             );
-        return idamApi.generateOpenIdToken(tokenRequest).accessToken;
+        return idamApi.generateOpenIdToken(tokenRequest);
     }
 
     /**
@@ -126,5 +155,40 @@ public class IdamClient {
 
     public UserInfo getUserInfo(String bearerToken) {
         return idamApi.retrieveUserInfo(bearerToken);
+    }
+
+    private class AccessTokenCacheExpiry implements Expiry<String, TokenResponse> {
+
+        @Override
+        public long expireAfterCreate(
+            @NonNull String key,
+            @NonNull TokenResponse tokenResp,
+            long currentTime
+        ) {
+            return TimeUnit.NANOSECONDS.convert(
+                (Long.valueOf(tokenResp.expiresIn) -  refreshTokenBeforeExpiry),
+                TimeUnit.SECONDS
+            );
+        }
+
+        @Override
+        public long expireAfterUpdate(
+            @NonNull String key,
+            @NonNull TokenResponse value,
+            long currentTime,
+            @NonNegative long currentDuration
+        ) {
+            return currentDuration;
+        }
+
+        @Override
+        public long expireAfterRead(
+            @NonNull String key,
+            @NonNull TokenResponse value,
+            long currentTime,
+            @NonNegative long currentDuration
+        ) {
+            return currentDuration;
+        }
     }
 }
