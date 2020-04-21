@@ -47,15 +47,18 @@ public class IdamClient {
 
     private static Cache<String, TokenResponse> accessTokenCache;
     private final long refreshTokenBeforeExpiry;
-    private final boolean  enableCache;
+    private final boolean cacheEnabled;
 
     @Autowired
-    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration,
-        @Value("${idam.client.enable-cache:false}") boolean enableCache,
-        @Value("${idam.client.refresh-before-expire-in-sec:120}") long refreshTokenBeforeExpiry) {
+    public IdamClient(
+        IdamApi idamApi,
+        OAuth2Configuration oauth2Configuration,
+        @Value("${idam.client.enable-cache:false}") boolean cacheEnabled,
+        @Value("${idam.client.refresh-before-expire-in-sec:120}") long refreshTokenBeforeExpiry
+    ) {
         this.idamApi = idamApi;
         this.oauth2Configuration = oauth2Configuration;
-        this.enableCache = enableCache;
+        this.cacheEnabled = cacheEnabled;
         this.refreshTokenBeforeExpiry = refreshTokenBeforeExpiry;
         this.accessTokenCache = Caffeine.newBuilder()
             .expireAfter(new AccessTokenCacheExpiry())
@@ -67,7 +70,7 @@ public class IdamClient {
     }
 
     public String getAccessToken(String username, String password) {
-        if (enableCache) {
+        if (cacheEnabled) {
             return
                 accessTokenCache
                     .get(username, b -> retrieveAccessToken(username, password)).accessToken;
@@ -165,10 +168,7 @@ public class IdamClient {
             @NonNull TokenResponse tokenResp,
             long currentTime
         ) {
-            return TimeUnit.NANOSECONDS.convert(
-                (Long.valueOf(tokenResp.expiresIn) -  refreshTokenBeforeExpiry),
-                TimeUnit.SECONDS
-            );
+            return TimeUnit.SECONDS.toNanos(Long.valueOf(tokenResp.expiresIn) -  refreshTokenBeforeExpiry);
         }
 
         @Override
