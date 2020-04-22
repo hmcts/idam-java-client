@@ -169,7 +169,7 @@ public class IdamClientTest {
     public void getAccessToken() {
         stubForOpenIdToken(HttpStatus.OK);
         final String token = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
-        assertThat(token).isEqualTo(TOKEN);
+        assertThat(token).isEqualTo(BEARER + TOKEN);
     }
 
     @Test
