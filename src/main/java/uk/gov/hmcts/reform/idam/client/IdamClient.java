@@ -60,7 +60,7 @@ public class IdamClient {
                 null,
                 null
             );
-        return idamApi.generateOpenIdToken(tokenRequest).accessToken;
+        return BEARER_AUTH_TYPE + " " + idamApi.generateOpenIdToken(tokenRequest).accessToken;
     }
 
     /**
