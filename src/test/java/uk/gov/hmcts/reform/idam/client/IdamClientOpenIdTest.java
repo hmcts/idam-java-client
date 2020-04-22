@@ -23,6 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalToIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -70,9 +71,21 @@ public class IdamClientOpenIdTest {
 
     @Test
     public void getAccessToken() {
+        given(idamClient.isCacheEnabled()).willReturn(false);
         stubForOpenIdToken(HttpStatus.OK);
         final String token = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
         assertThat(token).isEqualTo(TOKEN);
+    }
+
+    @Test
+    public void failedGetAccessToken() {
+        given(idamClient.isCacheEnabled()).willReturn(false);
+        stubForOpenIdToken(HttpStatus.UNAUTHORIZED);
+        FeignException exception = assertThrows(FeignException.class, () ->
+            idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD)
+        );
+
+        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
@@ -81,16 +94,6 @@ public class IdamClientOpenIdTest {
         stubForOpenIdToken(HttpStatus.OK);
         final String token = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
         assertThat(token).isEqualTo(TOKEN);
-    }
-
-    @Test
-    public void failedGetAccessToken() {
-        stubForOpenIdToken(HttpStatus.UNAUTHORIZED);
-        FeignException exception = assertThrows(FeignException.class, () ->
-            idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD)
-        );
-
-        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test

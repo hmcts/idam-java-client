@@ -70,7 +70,7 @@ public class IdamClient {
     }
 
     public String getAccessToken(String username, String password) {
-        if (cacheEnabled) {
+        if (isCacheEnabled()) {
             return
                 accessTokenCache
                     .get(username, b -> retrieveAccessToken(username, password)).accessToken;
@@ -158,6 +158,10 @@ public class IdamClient {
 
     public UserInfo getUserInfo(String bearerToken) {
         return idamApi.retrieveUserInfo(bearerToken);
+    }
+
+    public boolean isCacheEnabled() {
+        return cacheEnabled;
     }
 
     private class AccessTokenCacheExpiry implements Expiry<String, TokenResponse> {
