@@ -148,7 +148,7 @@ bintray {
 
 ext {
     lombokVersion = '1.18.8'
-    springCloudVersion = 'Hoxton.SR3'
+    springCloudVersion = 'Hoxton.SR4'
 }
 
 ext["spring-cloud-openfeign.version"] = "2.2.2.RELEASE"
