@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -65,7 +66,7 @@ public class IdamClientTest {
 
     private final String OPENID_TOKEN_RESULT = String.format(
             "{\"access_token\":\"%s\",\"refresh_token\":\"%s\",\"id_token\":\"%s\",\"token_type\":\"Bearer\","
-                    + "\"scope\": \"openid+profile+roles\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
+                    + "\"scope\": \"openid profile roles\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
 
     private final String USER_LOGIN = "user@example.com";
     private final String USER_PASSWORD = "Password12";
@@ -170,6 +171,18 @@ public class IdamClientTest {
         stubForOpenIdToken(HttpStatus.OK);
         final String token = idamClient.getAccessToken(USER_LOGIN, USER_PASSWORD);
         assertThat(token).isEqualTo(BEARER + TOKEN);
+    }
+
+    @Test
+    public void getAccessTokenResponse() {
+        stubForOpenIdToken(HttpStatus.OK);
+        final TokenResponse tokenResponse = idamClient.getAccessTokenResponse(USER_LOGIN, USER_PASSWORD);
+        assertThat(tokenResponse.accessToken).isEqualTo(TOKEN);
+        assertThat(tokenResponse.expiresIn).isEqualTo("28800");
+        assertThat(tokenResponse.idToken).isEqualTo(ID_TOKEN);
+        assertThat(tokenResponse.refreshToken).isEqualTo(REFRESH_TOKEN);
+        assertThat(tokenResponse.scope).isEqualTo("openid profile roles");
+        assertThat(tokenResponse.tokenType).isEqualTo("Bearer");
     }
 
     @Test

@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenExchangeResponse;
 import uk.gov.hmcts.reform.idam.client.models.TokenRequest;
+import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -47,8 +48,9 @@ public class IdamClient {
         return idamApi.retrieveUserDetails(bearerToken);
     }
 
-    public String getAccessToken(String username, String password) {
-        TokenRequest tokenRequest =
+    // when using the acess token you may need to add "Bearer "
+    public TokenResponse getAccessTokenResponse(String username, String password) {
+        return idamApi.generateOpenIdToken(
             new TokenRequest(
                 oauth2Configuration.getClientId(),
                 oauth2Configuration.getClientSecret(),
@@ -59,8 +61,11 @@ public class IdamClient {
                 OPENID_SCOPE,
                 null,
                 null
-            );
-        return BEARER_AUTH_TYPE + " " + idamApi.generateOpenIdToken(tokenRequest).accessToken;
+            ));
+    }
+
+    public String getAccessToken(String username, String password) {
+        return BEARER_AUTH_TYPE + " " + getAccessTokenResponse(username, password).accessToken;
     }
 
     public String authenticateUser(String username, String password) {
