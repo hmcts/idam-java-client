@@ -65,7 +65,7 @@ public class IdamClientTest {
 
     private final String OPENID_TOKEN_RESULT = String.format(
             "{\"access_token\":\"%s\",\"refresh_token\":\"%s\",\"id_token\":\"%s\",\"token_type\":\"Bearer\","
-                    + "\"scope\": \"openid\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
+                    + "\"scope\": \"openid+profile+roles\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
 
     private final String USER_LOGIN = "user@example.com";
     private final String USER_PASSWORD = "Password12";
@@ -218,7 +218,8 @@ public class IdamClientTest {
         idamApiServer.stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
-                + "scope=openid&client_secret=123456&redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
+                + "scope=openid+profile+roles&client_secret=123456&"
+                + "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&"
                 + "client_id=bsp&username=user%40example.com"))
             .willReturn(aResponse().withStatus(responseStatus.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

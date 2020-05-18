@@ -28,7 +28,7 @@ public class IdamClient {
     public static final String AUTH_TYPE = "code";
     public static final String GRANT_TYPE = "authorization_code";
     public static final String OPENID_GRANT_TYPE = "password";
-    public static final String OPENID_SCOPE = "openid";
+    public static final String OPENID_SCOPE = "openid profile roles";
 
     public static final String BASIC_AUTH_TYPE = "Basic";
     public static final String BEARER_AUTH_TYPE = "Bearer";
