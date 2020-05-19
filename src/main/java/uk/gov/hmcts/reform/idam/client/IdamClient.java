@@ -48,7 +48,7 @@ public class IdamClient {
         return idamApi.retrieveUserDetails(bearerToken);
     }
 
-    // when using the acess token you may need to add "Bearer "
+    // when using the access token you may need to add "Bearer "
     public TokenResponse getAccessTokenResponse(String username, String password) {
         return idamApi.generateOpenIdToken(
             new TokenRequest(
