@@ -70,7 +70,7 @@ public class IdamClient {
 
     /**
      * Authenticate user and get token.
-     * This method is no longer acceptable as idam start using OpenID and /oauth2/authorize endpoint deprecated.
+     * This method is no longer acceptable as idam now uses OpenID Connect and /oauth2/authorize endpoint is deprecated.
      *
      * @deprecated Use {@link IdamClient#getAccessToken(String, String)} or
      * {@link IdamClient#getAccessTokenResponse(String, String)} instead.
