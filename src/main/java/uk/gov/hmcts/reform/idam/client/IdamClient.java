@@ -68,6 +68,15 @@ public class IdamClient {
         return BEARER_AUTH_TYPE + " " + getAccessTokenResponse(username, password).accessToken;
     }
 
+    /**
+     * Authenticate user and get token.
+     * This method is no longer acceptable as idam now uses OpenID Connect and /oauth2/authorize endpoint is deprecated.
+     *
+     * @deprecated Use {@link IdamClient#getAccessToken(String, String)} or
+     * {@link IdamClient#getAccessTokenResponse(String, String)} instead.
+     *
+     */
+    @Deprecated
     public String authenticateUser(String username, String password) {
         String authorisation = username + ":" + password;
         String base64Authorisation = Base64.getEncoder().encodeToString(authorisation.getBytes());

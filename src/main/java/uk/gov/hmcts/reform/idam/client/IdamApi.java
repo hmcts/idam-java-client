@@ -45,6 +45,14 @@ public interface IdamApi {
         @RequestParam("state") final String state
     );
 
+
+    /**
+     * User Authenticate method.
+     *
+     * @deprecated
+     * IDAM oauth2/authorize endpoint is deprecated
+     */
+    @Deprecated
     @PostMapping(
         value = "/oauth2/authorize",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
