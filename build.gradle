@@ -8,6 +8,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.21'
+    id 'au.com.dius.pact' version '3.5.24'
 }
 
 def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
@@ -64,6 +65,11 @@ repositories {
     jcenter()
 }
 
+def versions = [
+        serentity                       : '2.0.17',
+        pact_version                    : '3.5.24',
+]
+
 jar {
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
@@ -92,6 +98,25 @@ def pomConfig = {
     }
 }
 
+sourceSets {
+    test {
+        java.srcDir 'src/test/unit/java'
+    }
+    testContract {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/contractTest/java')
+        }
+        resources.srcDir file('src/contractTest/resources')
+    }
+}
+
+configurations {
+    testContractCompile.extendsFrom testCompile
+    testContractRuntime.extendsFrom testRuntime
+}
+
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     getArchiveClassifier().set('sources')
@@ -101,6 +126,12 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     getArchiveClassifier().set('javadoc')
     from javadoc.destinationDir
+}
+
+task contract(type: Test, description: 'Runs the contract tests.', group: 'Verification') {
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.testContract.output.classesDirs
+    classpath = sourceSets.testContract.runtimeClasspath
 }
 
 artifacts {
@@ -148,7 +179,7 @@ bintray {
 
 ext {
     lombokVersion = '1.18.8'
-    springCloudVersion = 'Hoxton.SR3'
+    springCloudVersion = 'Hoxton.SR5'
 }
 
 ext["spring-cloud-openfeign.version"] = "2.2.2.RELEASE"
@@ -179,6 +210,24 @@ dependencies {
         exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
     }
     testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: '2.26.3'
+
+    testCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring_2.12', version: versions.pact_version
+    testContractCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring_2.12', version: versions.pact_version
+    testContractCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
+    testContractCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
+
+    testContractCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
+    testContractCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
+    testContractCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serentity
+    testContractCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serentity
+    testContractCompile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
+    testContractCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testContractCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testContractRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    testContractImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+
+    testContractCompile sourceSets.main.runtimeClasspath
+    testContractCompile sourceSets.test.runtimeClasspath
 }
 
 wrapper {
@@ -187,6 +236,15 @@ wrapper {
 
 test {
     useJUnitPlatform()
+}
+
+pact {
+    publish {
+        pactDirectory = 'target/pacts'
+        pactBrokerUrl = 'http://localhost:80'
+        tags = ['Dev']
+        //version = project.pactVersion
+    }
 }
 
 bootJar {

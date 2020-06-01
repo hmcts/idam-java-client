@@ -51,6 +51,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @EnableAutoConfiguration
 @RunWith(SpringRunner.class)
 public class IdamClientTest {
+
     private final String BEARER = "Bearer ";
     private final String TOKEN = "dddIIiwiaWF0IjoxNTUwNjk1Nzc5LCJleHAiOjE1NTA3MjQ1NzksImRhdGEiOiJjYXNld29ya2"
         + "F1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvYnNwIiwiZ3JvdXAiOiJic3Atc3lzdGVtdXBkYXRlIn0.P"

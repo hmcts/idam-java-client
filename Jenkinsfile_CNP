@@ -1,0 +1,11 @@
+#!groovy
+
+@Library("Infrastructure@SSCS-7575")
+
+withLibraryPipeline(type) {
+
+  enablePactAs([
+    AppPipelineDsl.PactRoles.CONSUMER
+  ])
+}
+
