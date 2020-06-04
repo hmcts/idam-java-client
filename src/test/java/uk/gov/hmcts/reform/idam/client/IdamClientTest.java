@@ -195,6 +195,31 @@ public class IdamClientTest {
         assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
+    @Test
+    public void findUserByUserId() throws JsonProcessingException {
+        final String FORENAME = "Hello";
+        final String USER_ID = "0a5874a4-3f38-4bbd";
+        final String SURNAME = "IDAM";
+        final List<String> ROLES = Lists.newArrayList("citizen");
+        UserDetails userDetails = UserDetails.builder()
+                .id(USER_ID)
+                .email(USER_LOGIN)
+                .forename(FORENAME)
+                .surname(SURNAME)
+                .roles(ROLES)
+                .build();
+
+        stubForUserByUserId(userDetails, USER_ID);
+
+        UserDetails found = idamClient.getUserByUserId(BEARER + TOKEN, USER_ID);
+
+        assertThat(found.getEmail()).isEqualTo(USER_LOGIN);
+        assertThat(found.getForename()).isEqualTo(FORENAME);
+        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(SURNAME));
+        assertThat(found.getRoles()).isEqualTo(ROLES);
+        assertThat(found.getId()).isEqualTo(USER_ID);
+    }
+
     private void stubForAuthenticateUser(HttpStatus responseStatus) {
         final String OAUTH2_AUTHORIZE_ENDPOINT = "/oauth2/authorize";
         final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
@@ -312,6 +337,16 @@ public class IdamClientTest {
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .withBody(objectMapper.writeValueAsString(userInfo))
             )
+        );
+    }
+
+    private void stubForUserByUserId(UserDetails userDetails, String userId) throws JsonProcessingException {
+        idamApiServer.stubFor(WireMock.get("/api/v1/users/" + userId)
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                        .withBody(objectMapper.writeValueAsString(userDetails))
+                )
         );
     }
 }

@@ -133,4 +133,8 @@ public class IdamClient {
     public UserInfo getUserInfo(String bearerToken) {
         return idamApi.retrieveUserInfo(bearerToken);
     }
+
+    public UserDetails getUserByUserId(String bearerToken, String userId) {
+        return idamApi.getUserByUserId(bearerToken, userId);
+    }
 }
