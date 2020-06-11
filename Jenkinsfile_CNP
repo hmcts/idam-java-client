@@ -3,16 +3,14 @@
 @Library("Infrastructure@SSCS-7575")
 
 import uk.gov.hmcts.contino.AppPipelineDsl
-import uk.gov.hmcts.contino.AppPipelineDsl.PactRoles as PactRoles
 
 def type = "java"
 def product = "idam"
 def component = "java-client"
 
 withLibraryPipeline(type, product, component) {
-  enablePactAs([
-    PactRoles.CONSUMER,
-    PactRoles.PROVIDER
-  ])
+    enablePactAs([
+            AppPipelineDsl.PactRoles.CONSUMER
+    ])
 }
 
