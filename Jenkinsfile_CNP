@@ -1,8 +1,8 @@
 #!groovy
 
-import uk.gov.hmcts.contino.AppPipelineDsl
-
 @Library("Infrastructure@SSCS-7575")
+
+import uk.gov.hmcts.contino.AppPipelineDsl
 
 def type = "java"
 def product = "idam"
