@@ -67,7 +67,6 @@ public class IdamClientConsumerTest {
         String accessToken = idamClient.getAccessToken("emCaseOfficer@email.net", "Password123");
 
         assertThat(accessToken).isEqualTo("Bearer some_access_token");
-        assert (false);
 
     }
 }
