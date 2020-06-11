@@ -3,8 +3,8 @@
 @Library("Infrastructure@SSCS-7575")
 
 def type = "java"
-def product = "idam-java-client"
-def component = "idam-java-client"
+def product = "idam"
+def component = "java-client"
 
 withLibraryPipeline(type, product, component) {
 
