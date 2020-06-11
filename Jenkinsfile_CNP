@@ -7,6 +7,9 @@ def product = "idam"
 def component = "java-client"
 
 withLibraryPipeline(type, product, component) {
-
+  enablePactAs([
+    PactRoles.CONSUMER,
+    PactRoles.PROVIDER
+  ])
 }
 
