@@ -134,6 +134,13 @@ task contract(type: Test, description: 'Runs the contract tests.', group: 'Verif
     classpath = sourceSets.testContract.runtimeClasspath
 }
 
+task runAndPublishConsumerPactTests(type: Test){
+    useJUnitPlatform()
+    logger.lifecycle("Runs pact Tests")
+    testClassesDirs = sourceSets.testContract.output.classesDirs
+    classpath = sourceSets.testContract.runtimeClasspath
+}
+
 artifacts {
     archives sourcesJar
     archives javadocJar
