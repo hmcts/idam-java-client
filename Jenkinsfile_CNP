@@ -8,8 +8,5 @@ def component = "java-client"
 
 withLibraryPipeline(type, product, component) {
 
-  enablePactAs([
-    AppPipelineDsl.PactRoles.CONSUMER
-  ])
 }
 
