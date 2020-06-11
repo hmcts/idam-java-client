@@ -2,7 +2,11 @@
 
 @Library("Infrastructure@SSCS-7575")
 
-withLibraryPipeline("java") {
+def type = "java"
+def product = "idam-java-client"
+def component = "idam-java-client"
+
+withLibraryPipeline(type, product, component) {
 
   enablePactAs([
     AppPipelineDsl.PactRoles.CONSUMER
