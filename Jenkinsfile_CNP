@@ -2,7 +2,7 @@
 
 @Library("Infrastructure@SSCS-7575")
 
-withLibraryPipeline(type) {
+withLibraryPipeline("java") {
 
   enablePactAs([
     AppPipelineDsl.PactRoles.CONSUMER
