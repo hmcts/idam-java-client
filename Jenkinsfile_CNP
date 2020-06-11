@@ -1,5 +1,7 @@
 #!groovy
 
+import uk.gov.hmcts.contino.AppPipelineDsl
+
 @Library("Infrastructure@SSCS-7575")
 
 def type = "java"
