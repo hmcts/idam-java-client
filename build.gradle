@@ -139,7 +139,10 @@ task runAndPublishConsumerPactTests(type: Test){
     logger.lifecycle("Runs pact Tests")
     testClassesDirs = sourceSets.testContract.output.classesDirs
     classpath = sourceSets.testContract.runtimeClasspath
+
 }
+
+runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 artifacts {
     archives sourcesJar
@@ -245,12 +248,21 @@ test {
     useJUnitPlatform()
 }
 
+//pact {
+//    publish {
+//        pactDirectory = 'target/pacts'
+//        pactBrokerUrl = 'http://localhost:80'
+//        tags = ['Dev']
+//        //version = project.pactVersion
+//    }
+//}
+
 pact {
     publish {
         pactDirectory = 'target/pacts'
-        pactBrokerUrl = 'http://localhost:80'
-        tags = ['Dev']
-        //version = project.pactVersion
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+//        version = project.pactVersion
     }
 }
 
