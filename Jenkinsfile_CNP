@@ -8,7 +8,7 @@ def type = "java"
 def product = "idam"
 def component = "java-client"
 
-withLibraryPipeline(type, product, component) {
+withPactTestOnlyPipeline(type, product, component) {
     enablePactAs([
             AppPipelineDsl.PactRoles.CONSUMER
     ])
