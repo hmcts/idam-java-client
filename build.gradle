@@ -248,21 +248,11 @@ test {
     useJUnitPlatform()
 }
 
-//pact {
-//    publish {
-//        pactDirectory = 'target/pacts'
-//        pactBrokerUrl = 'http://localhost:80'
-//        tags = ['Dev']
-//        //version = project.pactVersion
-//    }
-//}
-
 pact {
     publish {
         pactDirectory = 'target/pacts'
-        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        pactBrokerUrl = System.getProperty("pact.broker.url") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-//        version = project.pactVersion
     }
 }
 
