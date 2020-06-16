@@ -77,17 +77,18 @@ public class IdamClientConsumerTest {
 
         String accessToken = idamClient.getAccessToken("emCaseOfficer@email.net", "Password123");
 
-        assertThat(accessToken).isEqualTo("Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI");
+        assertThat(accessToken).isNotNull();
+        assertThat(accessToken).contains("Bearer");
     }
 
     private PactDslJsonBody createAuthResponse() {
 
         return new PactDslJsonBody()
-                .stringType("access_token", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI")
-                .stringType("refresh_token", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiYi9PNk92V")
+                .stringMatcher("access_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI")
+                .stringMatcher("refresh_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiYi9PNk92V")
                 .stringType("scope", "openid roles profile")
-                .stringType("id_token", "eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre")
+                .stringMatcher("id_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre")
                 .stringType("token_type", "Bearer")
-                .stringType("expires_in","28798");
+                .stringMatcher("expires_in", "[0-9]+", "28798");
     }
 }
