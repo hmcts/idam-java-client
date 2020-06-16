@@ -38,7 +38,7 @@ public class IdamClientConsumerTest {
 
     private static final String IDAM_OPENID_TOKEN_URL = "/o/token";
 
-    @Pact(provider = "Idam_api", consumer = "Annotation_api")
+    @Pact(provider = "Idam_api", consumer = "idamClient")
     public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
 
         String[] rolesArray = new String[1];
@@ -63,7 +63,7 @@ public class IdamClientConsumerTest {
                 .method(HttpMethod.POST.toString())
                 .body("redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=bsp&grant_type=password"
                         + "&username=emCaseOfficer%40email.net&password=Password123&client_secret=123456"
-                        + "&scope=openid profileroles", "application/x-www-form-urlencoded")
+                        + "&scope=openid profile roles", "application/x-www-form-urlencoded")
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .headers(responseheaders)
