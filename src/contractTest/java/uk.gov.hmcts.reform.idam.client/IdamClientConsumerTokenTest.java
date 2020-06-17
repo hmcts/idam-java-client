@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.idam.client;
 
 import au.com.dius.pact.consumer.Pact;
+import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
@@ -8,6 +10,7 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import com.google.common.collect.Maps;
 import org.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -31,12 +35,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @PactTestFor(providerName = "Idam_api", port = "5050")
 @SpringBootTest(classes = {IdamClient.class})
-public class IdamClientConsumerTest {
+public class IdamClientConsumerTokenTest {
 
     @Autowired
     private IdamClient idamClient;
 
     private static final String IDAM_OPENID_TOKEN_URL = "/o/token";
+
+    private static final String IDAM_DETAILS_URL = "/details";
+
+    @BeforeEach
+    public void beforeEach() {
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+
+        }
+    }
 
     @Pact(provider = "Idam_api", consumer = "idamClient")
     public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
@@ -58,7 +73,7 @@ public class IdamClientConsumerTest {
 
         return builder
                 .given("a user exists", params)
-                .uponReceiving("Provider takes user/pwd and returns Auth code to Idam Client")
+                .uponReceiving("Provider takes user/pwd and returns token to Idam Client")
                 .path(IDAM_OPENID_TOKEN_URL)
                 .method(HttpMethod.POST.toString())
                 .body("redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=pact&grant_type=password"
@@ -79,6 +94,60 @@ public class IdamClientConsumerTest {
 
         assertThat(accessToken).isNotNull();
         assertThat(accessToken).contains("Bearer");
+    }
+
+
+    @Pact(provider = "Idam_api", consumer = "idamClient")
+    public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
+
+        Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+        params.put("redirect_uri", "https://localhost:5000/receiver");
+        params.put("client_id", "pact");
+        params.put("client_secret", "pactsecret");
+        params.put("scope", "openid profile roles");
+        params.put("username", "emCaseOfficer@email.net");
+        params.put("password", "Password123");
+
+        return builder
+                .given("I have obtained an access_token as a user", params)
+                .uponReceiving("Provider returns user details to IdamClient")
+                .path(IDAM_DETAILS_URL)
+                .method(HttpMethod.GET.toString())
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(createUserInfoResponse())
+                .toPact();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "executeGetUserDetailsAndGet200")
+    public void should_get_user_details_with_access_token() {
+
+        UserDetails userDetails = idamClient.getUserDetails("Bearer afkgrkfglfhafjhaerfjwojjf");
+
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails).hasNoNullFieldsOrProperties();
+        assertThat(userDetails.getForename()).isNotBlank();
+        assertThat(userDetails.getSurname().get()).isNotBlank();
+
+        assertThat(userDetails.getRoles()).isNotNull();
+        assertThat(userDetails.getRoles().size()).isNotZero();
+        assertThat(userDetails.getRoles().get(0)).isNotBlank();
+
+    }
+
+    private DslPart createUserInfoResponse() {
+        PactDslJsonArray array = new PactDslJsonArray().stringValue("citizen");
+
+        return new PactDslJsonBody()
+                .stringType("id", "1234-2345-3456-4567")
+                .stringType("forename", "emCaseOfficer")
+                .stringType("surname", "Jar")
+                .stringType("email", "emCaseOfficer@email.net")
+                .array("roles")
+                .stringMatcher("[a-zA-Z0-9._-]+", "citizen")
+                .closeArray();
     }
 
     private PactDslJsonBody createAuthResponse() {
