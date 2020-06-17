@@ -61,10 +61,7 @@ public class IdamClientConsumerTest {
                 .uponReceiving("Provider takes user/pwd and returns Auth code to Idam Client")
                 .path(IDAM_OPENID_TOKEN_URL)
                 .method(HttpMethod.POST.toString())
-                .body(
-
-
-                        "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=pact&grant_type=password"
+                .body("redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=pact&grant_type=password"
                         + "&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret"
                         + "&scope=openid profile roles", "application/x-www-form-urlencoded")
                 .willRespondWith()
@@ -87,10 +84,13 @@ public class IdamClientConsumerTest {
     private PactDslJsonBody createAuthResponse() {
 
         return new PactDslJsonBody()
-                .stringMatcher("access_token", "[a-zA-Z0-9._-]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI.AL_JD-")
-                .stringMatcher("refresh_token", "[a-zA-Z0-9._-]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiO.iJOT05FIiwia2lkIjoi_i9PN-k92V")
+                .stringMatcher("access_token", "[a-zA-Z0-9._-]+",
+                        "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI.AL_JD-")
+                .stringMatcher("refresh_token", "[a-zA-Z0-9._-]+",
+                        "eyJ0eXAiOiJKV1QiLCJ6aXAiO.iJOT05FIiwia2lkIjoi_i9PN-k92V")
                 .stringType("scope", "openid roles profile")
-                .stringMatcher("id_token", "[a-zA-Z0-9._-]+", "eyJ0e.XAiOiJKV1QiLCJra-WQiOiJiL082_T3ZWdjEre")
+                .stringMatcher("id_token", "[a-zA-Z0-9._-]+",
+                        "eyJ0e.XAiOiJKV1QiLCJra-WQiOiJiL082_T3ZWdjEre")
                 .stringType("token_type", "Bearer")
                 .stringMatcher("expires_in", "[0-9]+", "28798");
     }
