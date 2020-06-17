@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @PactTestFor(providerName = "Idam_api", port = "5050")
 @SpringBootTest(classes = {IdamClient.class})
-public class IdamClientConsumerTokenTest {
+public class IdamClientConsumerTest {
 
     @Autowired
     private IdamClient idamClient;
@@ -45,12 +45,8 @@ public class IdamClientConsumerTokenTest {
     private static final String IDAM_DETAILS_URL = "/details";
 
     @BeforeEach
-    public void beforeEach() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-
-        }
+    public void beforeEach() throws Exception {
+        Thread.sleep(4000);
     }
 
     @Pact(provider = "Idam_api", consumer = "idamClient")
