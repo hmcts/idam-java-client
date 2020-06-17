@@ -87,10 +87,10 @@ public class IdamClientConsumerTest {
     private PactDslJsonBody createAuthResponse() {
 
         return new PactDslJsonBody()
-                .stringMatcher("access_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI")
-                .stringMatcher("refresh_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiYi9PNk92V")
+                .stringMatcher("access_token", "[a-zA-Z0-9._-]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI.AL_JD-")
+                .stringMatcher("refresh_token", "[a-zA-Z0-9._-]+", "eyJ0eXAiOiJKV1QiLCJ6aXAiO.iJOT05FIiwia2lkIjoi_i9PN-k92V")
                 .stringType("scope", "openid roles profile")
-                .stringMatcher("id_token", "[a-zA-Z0-9]+", "eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre")
+                .stringMatcher("id_token", "[a-zA-Z0-9._-]+", "eyJ0e.XAiOiJKV1QiLCJra-WQiOiJiL082_T3ZWdjEre")
                 .stringType("token_type", "Bearer")
                 .stringMatcher("expires_in", "[0-9]+", "28798");
     }
