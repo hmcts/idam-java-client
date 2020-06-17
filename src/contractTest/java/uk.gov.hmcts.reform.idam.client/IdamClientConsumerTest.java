@@ -61,8 +61,11 @@ public class IdamClientConsumerTest {
                 .uponReceiving("Provider takes user/pwd and returns Auth code to Idam Client")
                 .path(IDAM_OPENID_TOKEN_URL)
                 .method(HttpMethod.POST.toString())
-                .body("redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=bsp&grant_type=password"
-                        + "&username=emCaseOfficer%40email.net&password=Password123&client_secret=123456"
+                .body(
+
+
+                        "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=pact&grant_type=password"
+                        + "&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret"
                         + "&scope=openid profile roles", "application/x-www-form-urlencoded")
                 .willRespondWith()
                 .status(HttpStatus.OK.value())

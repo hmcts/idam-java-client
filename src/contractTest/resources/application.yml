@@ -1,0 +1,8 @@
+---
+idam:
+  api:
+    url: 'http://localhost:5050'
+  client:
+    id: 'pact'
+    secret: 'pactsecret'
+    redirect_uri: 'https://localhost:5000/receiver'
