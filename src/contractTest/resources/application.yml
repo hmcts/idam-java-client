@@ -3,6 +3,6 @@ idam:
   api:
     url: 'http://localhost:5050'
   client:
-    id: 'bsp'
-    secret: '123456'
+    id: 'pact'
+    secret: 'pactsecret'
     redirect_uri: 'https://localhost:5000/receiver'

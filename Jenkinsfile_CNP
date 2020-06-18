@@ -1,0 +1,16 @@
+#!groovy
+
+@Library("Infrastructure@SSCS-7575")
+
+import uk.gov.hmcts.contino.AppPipelineDsl
+
+def type = "java"
+def product = "idam"
+def component = "java-client"
+
+withPactTestOnlyPipeline(type, product, component) {
+    enablePactAs([
+            AppPipelineDsl.PactRoles.CONSUMER
+    ])
+}
+
