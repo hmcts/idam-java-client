@@ -230,7 +230,7 @@ dependencies {
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serentity
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serentity
-    testContractCompile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
+    testContractCompile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     testContractCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testContractCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
     testContractRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
