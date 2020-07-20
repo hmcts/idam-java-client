@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class IdamClient {
@@ -136,5 +137,9 @@ public class IdamClient {
 
     public UserDetails getUserByUserId(String bearerToken, String userId) {
         return idamApi.getUserByUserId(bearerToken, userId);
+    }
+
+    public List<UserDetails> searchUsers(String bearerToken, String elasticSearchQuery) {
+        return idamApi.searchUsers(bearerToken, elasticSearchQuery);
     }
 }
