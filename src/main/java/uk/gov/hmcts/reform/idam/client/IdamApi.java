@@ -21,6 +21,8 @@ import uk.gov.hmcts.reform.idam.client.models.TokenResponse;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
+import java.util.List;
+
 @FeignClient(name = "idam-api", url = "${idam.api.url}", configuration = CoreFeignConfiguration.class)
 public interface IdamApi {
 
@@ -86,5 +88,11 @@ public interface IdamApi {
     UserDetails getUserByUserId(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation,
             @PathVariable("userId") String userId
+    );
+
+    @GetMapping("/api/v1/users")
+    List<UserDetails> searchUsers(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation,
+            @RequestParam("query") final String elasticSearchQuery
     );
 }

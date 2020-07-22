@@ -38,7 +38,9 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToIgnoreCase;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -331,6 +333,29 @@ public class IdamClientTest {
         assertThat(found.getRoles()).isEqualTo(ROLES);
     }
 
+    @Test
+    public void searchUsers() throws JsonProcessingException {
+        final String FORENAME = "Hello";
+        final String USER_ID = "0a5874a4-3f38-4bbd";
+        final String SURNAME = "IDAM";
+        final List<String> ROLES = Lists.newArrayList("citizen");
+        UserDetails userDetails = UserDetails.builder()
+                .id(USER_ID)
+                .email(USER_LOGIN)
+                .forename(FORENAME)
+                .surname(SURNAME)
+                .roles(ROLES)
+                .build();
+
+        String query = "email:" + USER_LOGIN;
+        stubForSearchUsers(Lists.newArrayList(userDetails), query);
+
+        List<UserDetails> users = idamClient.searchUsers(BEARER + TOKEN, query);
+
+        assertThat(users).hasSize(1);
+        assertThat(users).containsExactly(userDetails);
+    }
+
     private void stubForUserInfo(UserInfo userInfo) throws JsonProcessingException {
         idamApiServer.stubFor(WireMock.get("/o/userinfo")
             .willReturn(aResponse()
@@ -347,6 +372,17 @@ public class IdamClientTest {
                         .withStatus(HttpStatus.OK.value())
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody(objectMapper.writeValueAsString(userDetails))
+                )
+        );
+    }
+
+    private void stubForSearchUsers(List<UserDetails> users, String query) throws JsonProcessingException {
+        idamApiServer.stubFor(WireMock.get(urlPathEqualTo("/api/v1/users"))
+                .withQueryParam("query", equalTo(query))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                        .withBody(objectMapper.writeValueAsString(users))
                 )
         );
     }
