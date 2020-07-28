@@ -5,4 +5,5 @@ idam:
   client:
     id: 'pact'
     secret: 'pactsecret'
+    scope: 'openid profile roles search-user'
     redirect_uri: 'https://localhost:5000/receiver'
