@@ -9,6 +9,7 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,9 +54,6 @@ public class IdamClientConsumerTest {
 
     @Pact(consumer = "idamClient")
     public RequestResponsePact executeGetUserInfo(PactDslWithProvider builder) {
-
-        Map<String, String> requestHeaders = Maps.newHashMap();
-        requestHeaders.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         Map<String, Object> params = new HashMap<>();
         params.put("redirect_uri", "http://www.dummy-pact-service.com/callback");
@@ -158,62 +155,4 @@ public class IdamClientConsumerTest {
                 .stringType("given_name", "John")
                 .stringType("family_name", "Smith");
     }
-
-
-    //FIXME: the pact below is commented out as it cannot work in the current shape - the state Users exist for search
-    // doesn't exist and it doesn't verify
-
-
-    /*
-    private static final String SEARCH_USERS_PATH = "/api/v1/users";
-
-    private static final String ACCESS_TOKEN =
-            "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiRm8rQXAybThDT3ROb290ZjF4TWg0bGc3MFlBPSIsImFsZyI6IlJTMjU2In0.";
-
-    @Pact(provider = "Idam_api", consumer = "idamClient")
-    public RequestResponsePact executeGetSearchUsersAndGet200(PactDslWithProvider builder) throws JSONException {
-
-        return builder
-                .given("Users exist for search")
-                .uponReceiving("Provider receives a GET /api/v1/users with search query")
-                .path(SEARCH_USERS_PATH)
-                .matchQuery("query", ".*", "email:\"bob@hmcts.com\"")
-                .method(HttpMethod.GET.toString())
-                .headers(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN)
-                .willRespondWith()
-                .headers(ImmutableMap.of(CONTENT_TYPE, APPLICATION_JSON_VALUE))
-                //if not provided Pact defaults Content-Type to: application/json; charset=UTF-8 which causes issues
-                .status(HttpStatus.OK.value())
-                .body(createSearchUsersResponse())
-                .toPact();
-    }
-
-
-    @Test
-    @PactTestFor(pactMethod = "executeGetSearchUsersAndGet200")
-    void verifyGetSearchUsers() {
-
-        List<UserDetails> result = idamClient.searchUsers(ACCESS_TOKEN, "email:\"bob@hmcts.com\"");
-
-        assertThat(result).hasSize(1);
-        UserDetails user = result.get(0);
-
-        assertThat(user.getId()).isNotEmpty();
-        assertThat(user.getEmail()).isNotEmpty();
-        assertThat(user.getForename()).isNotEmpty();
-        assertThat(user.getRoles()).isNotEmpty();
-    }
-
-
-    private DslPart createSearchUsersResponse() {
-        return PactDslJsonArray
-                .arrayEachLike()
-                .stringMatcher("id", "[a-zA-Z0-9-]+", "a833c2e2-2c73-4900-96ca-74b1efb37928")
-                .stringMatcher("email", "^(.+)@(.+)$", "bob@hmcts.com")
-                .stringType("forename", "Bob")
-                .stringType("surname", "Reform")
-                .minArrayLike("roles", 1, PactDslJsonRootValue.stringType("caseWorker"), 1)
-                .closeObject();
-    }
-    */
 }
