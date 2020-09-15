@@ -67,7 +67,7 @@ repositories {
 
 def versions = [
         serentity                       : '2.0.17',
-        pact_version                    : '3.5.24',
+        pact_version                    : '4.1.7',
 ]
 
 jar {
@@ -221,10 +221,8 @@ dependencies {
     }
     testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: '2.26.3'
 
-    testCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring_2.12', version: versions.pact_version
-    testContractCompile group: 'au.com.dius', name: 'pact-jvm-provider-spring_2.12', version: versions.pact_version
-    testContractCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
-    testContractCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
+    testContractCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+    testContractCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
 
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
@@ -250,7 +248,7 @@ test {
 
 pact {
     publish {
-        pactDirectory = 'target/pacts'
+        pactDirectory = 'build/pacts'
         pactBrokerUrl = System.getProperty("pact.broker.url") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
     }
