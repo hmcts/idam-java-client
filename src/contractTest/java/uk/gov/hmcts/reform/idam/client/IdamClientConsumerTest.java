@@ -69,7 +69,8 @@ public class IdamClientConsumerTest {
         return builder.given("I have obtained an access_token as a user",params)
                 .uponReceiving("IDAM returns user info to the client")
                 .path(IDAM_OPENID_USERINFO_URL)
-                .headerFromProviderState("Authorization", "Bearer ${access_token}","Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre")
+                .headerFromProviderState("Authorization", "Bearer ${access_token}",
+                        "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre")
                 .method(HttpMethod.GET.toString())
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
@@ -149,7 +150,6 @@ public class IdamClientConsumerTest {
     }
 
     private PactDslJsonBody createUserInfoResponse() {
-
         return new PactDslJsonBody()
                 .stringType("sub", "damian@swansea.gov.uk")
                 .stringType("uid", "33dff5a7-3b6f-45f1-b5e7-5f9be1ede355")
