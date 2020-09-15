@@ -8,8 +8,6 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +18,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -40,6 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IdamClientConsumerTest {
 
     public static final String TOKEN_REGEXP = "[a-zA-Z0-9._-]+";
+    public static final String BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre";
 
     @Autowired
     private IdamClient idamClient;
@@ -63,11 +61,11 @@ public class IdamClientConsumerTest {
         params.put("username", "damian@swansea.gov.uk");
         params.put("password", "Password12");
 
-        return builder.given("I have obtained an access_token as a user",params)
+        return builder.given("I have obtained an access_token as a user", params)
                 .uponReceiving("IDAM returns user info to the client")
                 .path(IDAM_OPENID_USERINFO_URL)
                 .headerFromProviderState("Authorization", "Bearer ${access_token}",
-                        "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre")
+                        BEARER_TOKEN)
                 .method(HttpMethod.GET.toString())
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
@@ -106,7 +104,7 @@ public class IdamClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "executeGetUserInfo")
     void verifyUserInfo() {
-        UserInfo actualUserInfo = idamClient.getUserInfo("Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre");
+        UserInfo actualUserInfo = idamClient.getUserInfo(BEARER_TOKEN);
 
         UserInfo expectedUserInfo = UserInfo.builder()
                 .familyName("Smith")
