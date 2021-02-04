@@ -4,24 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
 import com.google.common.collect.Lists;
 import feign.FeignException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.WireMockSpring;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
 import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
@@ -40,6 +36,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToIgnoreCase;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -51,7 +48,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootTest(classes = {IdamClient.class, IdamApi.class})
 @PropertySource(value = "classpath:application.yml")
 @EnableAutoConfiguration
-@RunWith(SpringRunner.class)
+@AutoConfigureWireMock(port = 5050)
 public class IdamClientTest {
 
     private final String BEARER = "Bearer ";
@@ -83,19 +80,13 @@ public class IdamClientTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Before
+    @BeforeEach
     public void setup() {
         PIN_REDIRECT_URL = REDIRECT_URI + "?code=" + PIN_AUTH_CODE;
 
         // See https://www.baeldung.com/jackson-optional for why this is needed
         objectMapper.registerModule(new Jdk8Module());
     }
-
-    @Rule
-    public WireMockClassRule idamApiServer = new WireMockClassRule(WireMockSpring
-        .options()
-        .port(5050)
-        .extensions(new ConnectionCloseExtension()));
 
     @Autowired
     private IdamClient idamClient;
@@ -227,7 +218,7 @@ public class IdamClientTest {
         final String OAUTH2_AUTHORIZE_ENDPOINT = "/oauth2/authorize";
         final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
         final String SUCCESS_OAUTH_BODY = "{\"code\":\"eEdhNnasWy7eNFAV\"}";
-        idamApiServer.stubFor(WireMock.post(OAUTH2_AUTHORIZE_ENDPOINT)
+        stubFor(WireMock.post(OAUTH2_AUTHORIZE_ENDPOINT)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase("response_type=code&"
                 + "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=bsp"))
@@ -242,7 +233,7 @@ public class IdamClientTest {
 
     private void stubForToken(String requestBody) {
         final String OAUTH2_TOKEN_ENDPOINT = "/oauth2/token";
-        idamApiServer.stubFor(WireMock.post(OAUTH2_TOKEN_ENDPOINT)
+        stubFor(WireMock.post(OAUTH2_TOKEN_ENDPOINT)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase(requestBody))
             .willReturn(aResponse()
@@ -256,7 +247,7 @@ public class IdamClientTest {
     private void stubForOpenIdToken(HttpStatus responseStatus) {
         final String OPENID_TOKEN_ENDPOINT = "/o/token";
 
-        idamApiServer.stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
+        stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
                 + "scope=openid+profile+roles&client_secret=123456&"
@@ -270,7 +261,7 @@ public class IdamClientTest {
 
     private void stubForDetails(UserDetails userDetails) throws JsonProcessingException {
         final String DETAILS_ENDPOINT = "/details";
-        idamApiServer.stubFor(WireMock.get(DETAILS_ENDPOINT)
+        stubFor(WireMock.get(DETAILS_ENDPOINT)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -282,7 +273,7 @@ public class IdamClientTest {
     private void stubForGeneratePin() throws JsonProcessingException {
         final String PIN_ENDPOINT = "/pin";
         GeneratePinResponse pinResponse = GeneratePinResponse.builder().pin(PIN).build();
-        idamApiServer.stubFor(WireMock.post(PIN_ENDPOINT)
+        stubFor(WireMock.post(PIN_ENDPOINT)
             .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(TOKEN))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
@@ -295,7 +286,7 @@ public class IdamClientTest {
     private void stubForAuthenticatePin() throws UnsupportedEncodingException {
         final String redirectUri = URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8.toString());
         final String PIN_ENDPOINT = String.format("/pin?client_id=%s&redirect_uri=%s&state", CLIENT_ID, redirectUri);
-        idamApiServer.stubFor(WireMock.get(PIN_ENDPOINT)
+        stubFor(WireMock.get(PIN_ENDPOINT)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.FOUND.value())
                 .withHeader(HttpHeaders.LOCATION, PIN_REDIRECT_URL)
@@ -357,7 +348,7 @@ public class IdamClientTest {
     }
 
     private void stubForUserInfo(UserInfo userInfo) throws JsonProcessingException {
-        idamApiServer.stubFor(WireMock.get("/o/userinfo")
+        stubFor(WireMock.get("/o/userinfo")
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -367,7 +358,7 @@ public class IdamClientTest {
     }
 
     private void stubForUserByUserId(UserDetails userDetails, String userId) throws JsonProcessingException {
-        idamApiServer.stubFor(WireMock.get("/api/v1/users/" + userId)
+        stubFor(WireMock.get("/api/v1/users/" + userId)
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -377,7 +368,7 @@ public class IdamClientTest {
     }
 
     private void stubForSearchUsers(List<UserDetails> users, String query) throws JsonProcessingException {
-        idamApiServer.stubFor(WireMock.get(urlPathEqualTo("/api/v1/users"))
+        stubFor(WireMock.get(urlPathEqualTo("/api/v1/users"))
                 .withQueryParam("query", equalTo(query))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.OK.value())
