@@ -13,7 +13,13 @@ This is a client library for interacting with the idam application.
 
 ## Usage
 
-Just include the library as your dependency and you will be to use the client class.
+Add the library as a dependency of your project and configure the spring application to scan for Feign clients in the `uk.gov.hmcts.reform.idam` package:
+
+```java
+@EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam"})
+public class YourSpringApplication { }
+```
+
 You will also need to set the spring configuration property of `idam.api.url` 
 
 Optionally if you are authenticating a user you can use provide client configuration:
