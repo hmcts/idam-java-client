@@ -50,7 +50,10 @@ checkstyle {
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
-sourceCompatibility = 1.8
+allprojects {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 compileJava {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
@@ -205,7 +208,6 @@ dependencies {
     api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     api group: 'io.github.openfeign', name: 'feign-jackson', version: '10.9'
     api group: 'io.github.openfeign', name: 'feign-httpclient', version: '10.9'
-    api group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
@@ -217,12 +219,11 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', {
-        exclude group: 'com.github.tomakehurst', module: 'wiremock-jre8-standalone'
+        exclude group: 'com.github.tomakehurst', module: 'wiremock-standalone'
     }
-    testImplementation group: 'com.github.tomakehurst', name:'wiremock-jre8', version: '2.26.3'
+    testImplementation group: 'com.github.tomakehurst', name:'wiremock', version: '2.26.3'
 
     testContractCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-    testContractCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
 
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
     testContractCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
