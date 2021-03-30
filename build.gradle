@@ -232,7 +232,7 @@ dependencies {
     testContractCompile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     testContractCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testContractCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    testContractRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testContractRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testContractImplementation('org.junit.jupiter:junit-jupiter-api:5.7.0')
 
     testContractCompile sourceSets.main.runtimeClasspath
