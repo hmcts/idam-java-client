@@ -221,7 +221,7 @@ dependencies {
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', {
         exclude group: 'com.github.tomakehurst', module: 'wiremock-standalone'
     }
-    testImplementation group: 'com.github.tomakehurst', name:'wiremock', version: '2.26.3'
+    testImplementation group: 'com.github.tomakehurst', name:'wiremock', version: '2.27.2'
 
     testContractCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
 
