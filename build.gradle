@@ -212,7 +212,7 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -233,7 +233,7 @@ dependencies {
     testContractCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testContractCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
     testContractRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    testContractImplementation('org.junit.jupiter:junit-jupiter-api:5.7.0')
+    testContractImplementation('org.junit.jupiter:junit-jupiter-api:5.7.2')
 
     testContractCompile sourceSets.main.runtimeClasspath
     testContractCompile sourceSets.test.runtimeClasspath
