@@ -5,19 +5,3 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: org.owasp.dependencycheck
-    versions:
-    - 6.1.1
-    - 6.1.2
-    - 6.1.4
-  - dependency-name: au.com.dius.pact
-    versions:
-    - 4.1.15
-    - 4.1.17
-    - 4.2.0
-    - 4.2.1
-  - dependency-name: org.springframework.boot
-    versions:
-    - 2.4.2
-    - 2.4.3
