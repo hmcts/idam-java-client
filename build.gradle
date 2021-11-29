@@ -193,7 +193,7 @@ bintray {
 ext {
     lombokVersion = '1.18.8'
     springCloudVersion = '2020.0.4'
-    junitJupiterVersion = '5.8.1'
+    junitJupiterVersion = '5.8.2'
 }
 
 ext["spring-cloud-openfeign.version"] = "3.0.1"
