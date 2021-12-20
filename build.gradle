@@ -4,7 +4,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.4'
     id 'com.jfrog.bintray' version '1.8.5'
     id 'com.github.ben-manes.versions' version '0.38.0'
-    id 'org.owasp.dependencycheck' version '6.3.2'
+    id 'org.owasp.dependencycheck' version '6.5.1'
     id 'java-library'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.21'
