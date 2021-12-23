@@ -208,7 +208,7 @@ dependencies {
     api group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
     api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     api group: 'io.github.openfeign', name: 'feign-jackson', version: '11.6'
-    api group: 'io.github.openfeign', name: 'feign-httpclient', version: '11.6'
+    api group: 'io.github.openfeign', name: 'feign-httpclient', version: '11.8'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
