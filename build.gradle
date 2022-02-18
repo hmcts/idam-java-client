@@ -192,7 +192,7 @@ bintray {
 
 ext {
     lombokVersion = '1.18.8'
-    springCloudVersion = '2020.0.4'
+    springCloudVersion = '2021.0.1'
     junitJupiterVersion = '5.8.1'
 }
 
