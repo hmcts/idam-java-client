@@ -5,6 +5,15 @@
 
 This is a client library for interacting with the idam application.
 
+## Note
+
+This repository is not supported by the CFT IDAM team.
+
+IDAM is an OpenId Connect (OIDC) compliant authentication service, and any OIDC solution should be suitable for integrating with IDAM. All services that use IDAM are expected to use the OIDC endpoints for authentication. The IDAM integration guide is available here:
+https://tools.hmcts.net/confluence/display/SISM/OIDC+Integration+Guide
+
+As noted in the code this repository makes some calls to deprecated endpoints and should be used with caution.
+
 ## Getting started
 
 ### Prerequisites
