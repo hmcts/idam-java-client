@@ -44,6 +44,12 @@ public class IdamClient {
         this.oauth2Configuration = oauth2Configuration;
     }
 
+    /**
+     * Get user details.
+     *
+     * @deprecated Use {@link IdamClient#getUserInfo(String)} instead.
+     */
+    @Deprecated
     public UserDetails getUserDetails(String bearerToken) {
         return idamApi.retrieveUserDetails(bearerToken);
     }
@@ -98,6 +104,13 @@ public class IdamClient {
         return BEARER_AUTH_TYPE + " " + tokenExchangeResponse.getAccessToken();
     }
 
+    /**
+     * Exchange code request.
+     * This uses a tactical endpoint which is replaced by OpenId /o/token.
+     *
+     * @deprecated Use {@link IdamClient#getAccessToken(String, String)} for password grants.
+     */
+    @Deprecated
     public TokenExchangeResponse exchangeCode(ExchangeCodeRequest exchangeCodeRequest) {
         return idamApi.exchangeCode(exchangeCodeRequest);
     }
