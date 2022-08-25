@@ -9,10 +9,10 @@ metadata:
   tags:
     - java
   links:
-    - url: https://hmcts-reform.slack.com/app_redirect?channel=developers
-      title: "#developers on Slack"
+    - url: https://hmcts-reform.slack.com/app_redirect?channel=idam_tech
+      title: "#idam_tech on Slack"
       icon: chat
 spec:
   type: service
   lifecycle: production
-  owner: dts_cft_developers
+  owner: dcd_idam
