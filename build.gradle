@@ -7,8 +7,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '7.1.2'
     id 'java-library'
     id 'maven-publish'
-    id 'net.ltgt.apt' version '0.21'
-    id 'au.com.dius.pact' version '4.2.14'
+    id 'au.com.dius.pact' version '4.3.14'
 }
 
 def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
@@ -225,20 +224,20 @@ dependencies {
     }
     testImplementation group: 'com.github.tomakehurst', name:'wiremock', version: '2.27.2'
 
-    testContractCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
 
-    testContractCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
-    testContractCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
-    testContractCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serentity
-    testContractCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serentity
-    testContractCompile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-    testContractCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testContractCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testContractRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-    testContractImplementation('org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}')
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serentity
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serentity
+    testContractImplementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    testContractImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testContractImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testContractRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+    testContractImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
 
-    testContractCompile sourceSets.main.runtimeClasspath
-    testContractCompile sourceSets.test.runtimeClasspath
+    testContractImplementation sourceSets.main.runtimeClasspath
+    testContractImplementation sourceSets.test.runtimeClasspath
 }
 
 wrapper {
