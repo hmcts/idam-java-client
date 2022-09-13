@@ -20,7 +20,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 
 public class CoreFeignConfiguration {
-    private int REQUEST_TIMEOUT = 10000;
+
+    @Value("${idam.api.timeout:10000}")
+    private int REQUEST_TIMEOUT;
 
     @Value("${idam.api.loglevel:NONE}")
     private Logger.Level logLevel;
@@ -40,7 +42,7 @@ public class CoreFeignConfiguration {
         return new FormEncoder(new SpringEncoder(this.messageConverters));
     }
 
-    @ConditionalOnProperty(value="idam.apachehttpclient.enable", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(value = "idam.apachehttpclient.enable", havingValue = "true", matchIfMissing = true)
     @Bean
     public Client getFeignHttpClient() {
         return new ApacheHttpClient(getHttpClient());
