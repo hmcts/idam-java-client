@@ -119,17 +119,6 @@ configurations {
     testContractRuntime.extendsFrom testRuntime
 }
 
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    getArchiveClassifier().set('sources')
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    getArchiveClassifier().set('javadoc')
-    from javadoc.destinationDir
-}
-
 task contract(type: Test, description: 'Runs the contract tests.', group: 'Verification') {
     useJUnitPlatform()
     testClassesDirs = sourceSets.testContract.output.classesDirs
@@ -146,17 +135,15 @@ task runAndPublishConsumerPactTests(type: Test){
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
     publications {
-        Main(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
             groupId project.group
             artifactId 'idam-client'
             version project.version
@@ -168,23 +155,6 @@ publishing {
                 root.appendNode('url', gitRepo)
                 root.children().last() + pomConfig
             }
-        }
-    }
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['Main']
-    publish = true
-    pkg {
-        repo = 'hmcts-maven'
-        name = 'idam-client'
-        userOrg = 'hmcts'
-        licenses = ['MIT']
-        vcsUrl = gitRepo
-        version {
-            name = project.version
         }
     }
 }
@@ -262,4 +232,5 @@ bootJar {
 
 jar {
     enabled = true
+    archiveClassifier = ''
 }
