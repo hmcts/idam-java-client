@@ -67,11 +67,6 @@ repositories {
     mavenCentral()
 }
 
-def versions = [
-        serentity                       : '2.0.17',
-        pact_version                    : '4.1.7',
-]
-
 jar {
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
@@ -162,6 +157,7 @@ ext {
     lombokVersion = '1.18.24'
     springCloudVersion = '2021.0.4'
     junitJupiterVersion = '5.9.0'
+    serenityVersion = '2.0.17'
 }
 
 dependencies {
@@ -182,12 +178,12 @@ dependencies {
 
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '4.0.0'
 
-    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.4.3'
 
-    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serentity
-    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serentity
-    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serentity
-    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serentity
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: serenityVersion
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: serenityVersion
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: serenityVersion
+    testContractImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: serenityVersion
     testContractImplementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     testContractImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testContractImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
