@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@run-check-on-pr")
 
 import uk.gov.hmcts.contino.AppPipelineDsl
 
