@@ -5,6 +5,7 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
+import au.com.dius.pact.consumer.junit5.ProviderType;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import com.google.common.collect.Lists;
@@ -33,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
 @PactTestFor(providerName = "Idam_api", port = "5050")
-@SpringBootTest(classes = {IdamClient.class})
+@SpringBootTest(classes = {IdamClient.class, OAuth2Configuration.class})
 public class IdamClientConsumerTest {
 
     public static final String TOKEN_REGEXP = "[a-zA-Z0-9._-]+";
@@ -102,7 +103,7 @@ public class IdamClientConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "executeGetUserInfo")
+    @PactTestFor(pactMethod = "executeGetUserInfo", providerType = ProviderType.ASYNCH)
     void verifyUserInfo() {
         UserInfo actualUserInfo = idamClient.getUserInfo(BEARER_TOKEN);
 
@@ -120,7 +121,7 @@ public class IdamClientConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
+    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200", providerType = ProviderType.ASYNCH)
     void verifyGetAccessTokenPact() {
 
         String returnedAccessToken = idamClient.getAccessToken("emCaseOfficer@email.net", "Password123");
