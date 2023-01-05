@@ -114,6 +114,11 @@ configurations {
     testContractRuntime.extendsFrom testRuntime
 }
 
+// https://github.com/gradle/gradle/issues/16791
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
+
 task contract(type: Test, description: 'Runs the contract tests.', group: 'Verification') {
     useJUnitPlatform()
     testClassesDirs = sourceSets.testContract.output.classesDirs
