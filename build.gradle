@@ -1,7 +1,7 @@
 plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '2.7.3'
+    id 'org.springframework.boot' version '3.0.1'
     id 'com.jfrog.bintray' version '1.8.5'
     id 'com.github.ben-manes.versions' version '0.44.0'
     id 'org.owasp.dependencycheck' version '7.4.3'
