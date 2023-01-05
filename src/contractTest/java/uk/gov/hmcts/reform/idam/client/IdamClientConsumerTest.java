@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
 @PactTestFor(providerName = "Idam_api", port = "5050")
-@SpringBootTest(classes = {IdamClient.class})
+@SpringBootTest(classes = {IdamClient.class, OAuth2Configuration.class})
 public class IdamClientConsumerTest {
 
     public static final String TOKEN_REGEXP = "[a-zA-Z0-9._-]+";
