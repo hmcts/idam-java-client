@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
-import com.google.common.collect.Lists;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,7 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
-@SpringBootTest(classes = {IdamClient.class, IdamApi.class})
+@SpringBootTest(classes = {IdamClient.class, IdamApi.class, OAuth2Configuration.class})
 @PropertySource(value = "classpath:application.yml")
 @EnableAutoConfiguration
 @AutoConfigureWireMock(port = 5050)
@@ -194,7 +193,7 @@ public class IdamClientTest {
         final String FORENAME = "Hello";
         final String USER_ID = "0a5874a4-3f38-4bbd";
         final String SURNAME = "IDAM";
-        final List<String> ROLES = Lists.newArrayList("citizen");
+        final List<String> ROLES = List.of("citizen");
         UserDetails userDetails = UserDetails.builder()
                 .id(USER_ID)
                 .email(USER_LOGIN)
@@ -301,7 +300,7 @@ public class IdamClientTest {
         final String NAME = "Hello IDAM";
         final String GIVEN_NAME = "Hello";
         final String FAMILY_NAME = "IDAM";
-        final List<String> ROLES = Lists.newArrayList("citizen");
+        final List<String> ROLES = List.of("citizen");
 
         UserInfo userDetails = UserInfo.builder()
             .sub(SUB)
@@ -329,7 +328,7 @@ public class IdamClientTest {
         final String FORENAME = "Hello";
         final String USER_ID = "0a5874a4-3f38-4bbd";
         final String SURNAME = "IDAM";
-        final List<String> ROLES = Lists.newArrayList("citizen");
+        final List<String> ROLES = List.of("citizen");
         UserDetails userDetails = UserDetails.builder()
                 .id(USER_ID)
                 .email(USER_LOGIN)
@@ -339,7 +338,7 @@ public class IdamClientTest {
                 .build();
 
         String query = "email:" + USER_LOGIN;
-        stubForSearchUsers(Lists.newArrayList(userDetails), query);
+        stubForSearchUsers(List.of(userDetails), query);
 
         List<UserDetails> users = idamClient.searchUsers(BEARER + TOKEN, query);
 
