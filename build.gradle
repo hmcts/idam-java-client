@@ -176,7 +176,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 
-    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '4.0.0'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '4.0.1'
 
     testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.4.3'
 
