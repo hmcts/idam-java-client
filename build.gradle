@@ -178,7 +178,7 @@ dependencies {
 
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '4.0.0'
 
-    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.4.3'
+    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.5.4'
 
     testContractImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: serenityVersion
     testContractImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: serenityVersion
