@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.idam.client;
 import feign.Response;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
@@ -25,6 +26,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
+@AutoConfiguration
 public class IdamClient {
 
     public static final String AUTH_TYPE = "code";
