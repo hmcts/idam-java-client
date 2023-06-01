@@ -50,38 +50,37 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @AutoConfigureWireMock(port = 5050)
 public class IdamClientTest {
 
-    private final String BEARER = "Bearer ";
-    private final String TOKEN = "dddIIiwiaWF0IjoxNTUwNjk1Nzc5LCJleHAiOjE1NTA3MjQ1NzksImRhdGEiOiJjYXNld29ya2"
+    private static final String BEARER = "Bearer ";
+    private static final String TOKEN = "dddIIiwiaWF0IjoxNTUwNjk1Nzc5LCJleHAiOjE1NTA3MjQ1NzksImRhdGEiOiJjYXNld29ya2"
         + "F1bHQtdXJsIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6OTAwMC9wb2MvYnNwIiwiZ3JvdXAiOiJic3Atc3lzdGVtdXBkYXRlIn0.P"
         + "djD2Kjz6myH1p44CRCVztkl2lqkg0LXqiyoH7Hs2bg";
-    private final String REFRESH_TOKEN = "NlLWJzcC1zeXN0ZW0tdXBkYXRlQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUx"
+    private static final String REFRESH_TOKEN = "NlLWJzcC1zeXN0ZW0tdXBkYXRlQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUx"
         + "fyJdXaI5YUO6bNxmby3jkqRVUMe25nOwWMiOyqoZDg3ehMGJuSqMguQwMrg1kc8RB6ZtVugPctVgW_ffE9EYc3i8yfTqq8rUvxDJI"
         +  "dCT4jkArwuitcvSmUg2XCTy_YoqdwQcGZD5vI3Wya1polA";
-    private final String ID_TOKEN = "oiUlMyNTYifQ.eyJhdF9oYXNoIjoibFpJWlg1M3BzRnVCZWlpMllLWTFBUSIsInN1YiI6ImRpdR"
+    private static final String ID_TOKEN = "oiUlMyNTYifQ.eyJhdF9oYXNoIjoibFpJWlg1M3BzRnVCZWlpMllLWTFBUSIsInN1YiI6ImRpdR"
         + "Vmxt1h2dGD9dAPBYSR6G0LEP_N5MUUCahVMDQeSBawzwW54AOsm4wwd5UUV_Xn8tAvovt4g-iZQGwBsi6t_FTLLYiPzapL-12jKt"
         + "oCKtFmyLlfcBXTLaPywi8oFfinCRaVQ83BiKtIXuImGrYN8WeZVtvZwAQzmHqA4PoDJBzOJWptL-Z63wVFoQZy2AHaFLcR_Yv07w";
-    private final String EXCHANGE_CODE_RESULT = String.format(
+    private static final String EXCHANGE_CODE_RESULT = String.format(
         "{\"access_token\":\"%s\",\"token_type\":\"Bearer\",\"expires_in\":28800}", TOKEN);
 
-    private final String OPENID_TOKEN_RESULT = String.format(
+    private static final String OPENID_TOKEN_RESULT = String.format(
             "{\"access_token\":\"%s\",\"refresh_token\":\"%s\",\"id_token\":\"%s\",\"token_type\":\"Bearer\","
                     + "\"scope\": \"openid profile roles\",\"expires_in\":28800}", TOKEN, REFRESH_TOKEN, ID_TOKEN);
 
-    private final String USER_LOGIN = "user@example.com";
-    private final String USER_PASSWORD = "Password12";
-    private final String EXCHANGE_CODE = "eEdhNnasWy7eNFAV";
-    private final String PIN_AUTH_CODE = "abcdefgh123456789";
-    private final String PIN = "ABCD1234";
-    private String PIN_REDIRECT_URL;
-    @Value("${idam.client.redirect_uri:}") private String REDIRECT_URI;
-    @Value("${idam.client.id:}") private String CLIENT_ID;
-    @Value("${idam.client.secret:}") private String CLIENT_SECRET;
+    private static final String USER_LOGIN = "user@example.com";
+    private static final String USER_PASSWORD = "Password12";
+    private static final String EXCHANGE_CODE = "eEdhNnasWy7eNFAV";
+    private static final String PIN_AUTH_CODE = "abcdefgh123456789";
+    private static final String PIN = "ABCD1234";
+    private String pinRedirectUrl;
+    @Value("${idam.client.redirect_uri:}") private String redirectUri;
+    @Value("${idam.client.id:}") private String clientId;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setup() {
-        PIN_REDIRECT_URL = REDIRECT_URI + "?code=" + PIN_AUTH_CODE;
+        pinRedirectUrl = redirectUri + "?code=" + PIN_AUTH_CODE;
 
         // See https://www.baeldung.com/jackson-optional for why this is needed
         objectMapper.registerModule(new Jdk8Module());
@@ -114,18 +113,18 @@ public class IdamClientTest {
 
     @Test
     public void findsDetailsForAuthToken() throws JsonProcessingException {
-        final String FORENAME = "Hello";
-        final String SURNAME = "IDAM";
+        final String forename = "Hello";
+        final String surname = "IDAM";
         UserDetails userDetails = UserDetails.builder()
             .email(USER_LOGIN)
-            .forename(FORENAME)
-            .surname(SURNAME)
+            .forename(forename)
+            .surname(surname)
             .build();
         stubForDetails(userDetails);
         UserDetails found = idamClient.getUserDetails(BEARER + TOKEN);
         assertThat(userDetails.getEmail()).isEqualTo(USER_LOGIN);
-        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(SURNAME));
-        assertThat(found.getFullName()).isEqualTo(FORENAME + " " + SURNAME);
+        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(surname));
+        assertThat(found.getFullName()).isEqualTo(forename + " " + surname);
     }
 
     @Test
@@ -190,49 +189,49 @@ public class IdamClientTest {
 
     @Test
     public void findUserByUserId() throws JsonProcessingException {
-        final String FORENAME = "Hello";
-        final String USER_ID = "0a5874a4-3f38-4bbd";
-        final String SURNAME = "IDAM";
-        final List<String> ROLES = List.of("citizen");
+        final String forename = "Hello";
+        final String userId = "0a5874a4-3f38-4bbd";
+        final String surname = "IDAM";
+        final List<String> roles = List.of("citizen");
         UserDetails userDetails = UserDetails.builder()
-                .id(USER_ID)
+                .id(userId)
                 .email(USER_LOGIN)
-                .forename(FORENAME)
-                .surname(SURNAME)
-                .roles(ROLES)
+                .forename(forename)
+                .surname(surname)
+                .roles(roles)
                 .build();
 
-        stubForUserByUserId(userDetails, USER_ID);
+        stubForUserByUserId(userDetails, userId);
 
-        UserDetails found = idamClient.getUserByUserId(BEARER + TOKEN, USER_ID);
+        UserDetails found = idamClient.getUserByUserId(BEARER + TOKEN, userId);
 
         assertThat(found.getEmail()).isEqualTo(USER_LOGIN);
-        assertThat(found.getForename()).isEqualTo(FORENAME);
-        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(SURNAME));
-        assertThat(found.getRoles()).isEqualTo(ROLES);
-        assertThat(found.getId()).isEqualTo(USER_ID);
+        assertThat(found.getForename()).isEqualTo(forename);
+        found.getSurname().ifPresent(name -> assertThat(name).isEqualTo(surname));
+        assertThat(found.getRoles()).isEqualTo(roles);
+        assertThat(found.getId()).isEqualTo(userId);
     }
 
     private void stubForAuthenticateUser(HttpStatus responseStatus) {
-        final String OAUTH2_AUTHORIZE_ENDPOINT = "/oauth2/authorize";
-        final String AUTH_TOKEN = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
-        final String SUCCESS_OAUTH_BODY = "{\"code\":\"eEdhNnasWy7eNFAV\"}";
-        stubFor(WireMock.post(OAUTH2_AUTHORIZE_ENDPOINT)
+        final String oauth2AuthorizeEndpoint = "/oauth2/authorize";
+        final String authToken = "Basic dXNlckBleGFtcGxlLmNvbTpQYXNzd29yZDEy";
+        final String successOauthBody = "{\"code\":\"eEdhNnasWy7eNFAV\"}";
+        stubFor(WireMock.post(oauth2AuthorizeEndpoint)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase("response_type=code&"
                 + "redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=bsp"))
-            .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(AUTH_TOKEN))
+            .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(authToken))
             .willReturn(aResponse()
                 .withStatus(responseStatus.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .withBody(SUCCESS_OAUTH_BODY)
+                .withBody(successOauthBody)
             )
         );
     }
 
     private void stubForToken(String requestBody) {
-        final String OAUTH2_TOKEN_ENDPOINT = "/oauth2/token";
-        stubFor(WireMock.post(OAUTH2_TOKEN_ENDPOINT)
+        final String oauth2TokenEndpoint = "/oauth2/token";
+        stubFor(WireMock.post(oauth2TokenEndpoint)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase(requestBody))
             .willReturn(aResponse()
@@ -244,9 +243,9 @@ public class IdamClientTest {
     }
 
     private void stubForOpenIdToken(HttpStatus responseStatus) {
-        final String OPENID_TOKEN_ENDPOINT = "/o/token";
+        final String openidTokenEndpoint = "/o/token";
 
-        stubFor(WireMock.post(OPENID_TOKEN_ENDPOINT)
+        stubFor(WireMock.post(openidTokenEndpoint)
             .withHeader(CONTENT_TYPE, containing(APPLICATION_FORM_URLENCODED.toString()))
             .withRequestBody(equalToIgnoreCase("password=Password12&grant_type=password&"
                 + "scope=openid+profile+roles&client_secret=123456&"
@@ -259,8 +258,8 @@ public class IdamClientTest {
     }
 
     private void stubForDetails(UserDetails userDetails) throws JsonProcessingException {
-        final String DETAILS_ENDPOINT = "/details";
-        stubFor(WireMock.get(DETAILS_ENDPOINT)
+        final String detailsEndpoint = "/details";
+        stubFor(WireMock.get(detailsEndpoint)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -270,9 +269,9 @@ public class IdamClientTest {
     }
 
     private void stubForGeneratePin() throws JsonProcessingException {
-        final String PIN_ENDPOINT = "/pin";
+        final String pinEndpoint = "/pin";
         GeneratePinResponse pinResponse = GeneratePinResponse.builder().pin(PIN).build();
-        stubFor(WireMock.post(PIN_ENDPOINT)
+        stubFor(WireMock.post(pinEndpoint)
             .withHeader(HttpHeaders.AUTHORIZATION, new EqualToPattern(TOKEN))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
@@ -283,58 +282,58 @@ public class IdamClientTest {
     }
 
     private void stubForAuthenticatePin() throws UnsupportedEncodingException {
-        final String redirectUri = URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8.toString());
-        final String PIN_ENDPOINT = String.format("/pin?client_id=%s&redirect_uri=%s&state", CLIENT_ID, redirectUri);
-        stubFor(WireMock.get(PIN_ENDPOINT)
+        final String redirectUri = URLEncoder.encode(this.redirectUri, StandardCharsets.UTF_8.toString());
+        final String pinEndpoint = String.format("/pin?client_id=%s&redirect_uri=%s&state", clientId, redirectUri);
+        stubFor(WireMock.get(pinEndpoint)
             .willReturn(aResponse()
                 .withStatus(HttpStatus.FOUND.value())
-                .withHeader(HttpHeaders.LOCATION, PIN_REDIRECT_URL)
+                .withHeader(HttpHeaders.LOCATION, pinRedirectUrl)
             )
         );
     }
 
     @Test
     public void findsUserInfoForAuthToken() throws JsonProcessingException {
-        final String SUB = "hello-idam@reform.local";
-        final String UID = "hello-idam-01";
-        final String NAME = "Hello IDAM";
-        final String GIVEN_NAME = "Hello";
-        final String FAMILY_NAME = "IDAM";
-        final List<String> ROLES = List.of("citizen");
+        final String sub = "hello-idam@reform.local";
+        final String uid = "hello-idam-01";
+        final String name = "Hello IDAM";
+        final String givenName = "Hello";
+        final String familyName = "IDAM";
+        final List<String> roles = List.of("citizen");
 
         UserInfo userDetails = UserInfo.builder()
-            .sub(SUB)
-            .uid(UID)
-            .name(NAME)
-            .givenName(GIVEN_NAME)
-            .familyName(FAMILY_NAME)
-            .roles(ROLES)
+            .sub(sub)
+            .uid(uid)
+            .name(name)
+            .givenName(givenName)
+            .familyName(familyName)
+            .roles(roles)
             .build();
 
         stubForUserInfo(userDetails);
 
         UserInfo found = idamClient.getUserInfo(BEARER + TOKEN);
 
-        assertThat(found.getSub()).isEqualTo(SUB);
-        assertThat(found.getUid()).isEqualTo(UID);
-        assertThat(found.getName()).isEqualTo(NAME);
-        assertThat(found.getGivenName()).isEqualTo(GIVEN_NAME);
-        assertThat(found.getFamilyName()).isEqualTo(FAMILY_NAME);
-        assertThat(found.getRoles()).isEqualTo(ROLES);
+        assertThat(found.getSub()).isEqualTo(sub);
+        assertThat(found.getUid()).isEqualTo(uid);
+        assertThat(found.getName()).isEqualTo(name);
+        assertThat(found.getGivenName()).isEqualTo(givenName);
+        assertThat(found.getFamilyName()).isEqualTo(familyName);
+        assertThat(found.getRoles()).isEqualTo(roles);
     }
 
     @Test
     public void searchUsers() throws JsonProcessingException {
-        final String FORENAME = "Hello";
-        final String USER_ID = "0a5874a4-3f38-4bbd";
-        final String SURNAME = "IDAM";
-        final List<String> ROLES = List.of("citizen");
+        final String forename = "Hello";
+        final String userId = "0a5874a4-3f38-4bbd";
+        final String surname = "IDAM";
+        final List<String> roles = List.of("citizen");
         UserDetails userDetails = UserDetails.builder()
-                .id(USER_ID)
+                .id(userId)
                 .email(USER_LOGIN)
-                .forename(FORENAME)
-                .surname(SURNAME)
-                .roles(ROLES)
+                .forename(forename)
+                .surname(surname)
+                .roles(roles)
                 .build();
 
         String query = "email:" + USER_LOGIN;
