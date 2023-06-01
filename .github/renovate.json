@@ -1,11 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabledManagers": [
-    "gradle-wrapper"
-  ],
-  "labels": [
-    "dependencies"
-  ],
   "extends": [
     "local>hmcts/.github:renovate-config"
   ]
