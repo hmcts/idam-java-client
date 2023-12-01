@@ -158,7 +158,7 @@ ext {
     lombokVersion = '1.18.30'
     springCloudVersion = '2021.0.4'
     junitJupiterVersion = '5.9.3'
-    serenityVersion = '4.0.24'
+    serenityVersion = '4.0.25'
 }
 
 dependencies {
