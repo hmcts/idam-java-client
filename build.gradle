@@ -185,7 +185,7 @@ dependencies {
     testContractImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: serenityVersion
     testContractImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: serenityVersion
     testContractImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: serenityVersion
-    testContractImplementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.4'
+    testContractImplementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.5'
     testContractImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testContractImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
     testContractRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
