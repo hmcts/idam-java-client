@@ -157,7 +157,7 @@ publishing {
 ext {
     lombokVersion = '1.18.30'
     springCloudVersion = '2021.0.4'
-    junitJupiterVersion = '5.10.1'
+    junitJupiterVersion = '5.10.2'
     serenityVersion = '4.0.29'
 }
 
