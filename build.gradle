@@ -45,7 +45,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.19.0'
+    toolVersion = '10.20.0'
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
