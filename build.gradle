@@ -12,7 +12,7 @@ plugins {
 
 def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
 
-group 'uk.gov.hmcts.reform'
+group 'com.github.hmcts'
 version buildNumber
 
 dependencyUpdates.resolutionStrategy {
