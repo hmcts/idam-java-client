@@ -5,10 +5,8 @@ import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.consumer.junit5.ProviderType;
-import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -52,7 +51,7 @@ public class IdamClientConsumerTest {
     }
 
     @Pact(consumer = "idamClient")
-    public RequestResponsePact executeGetUserInfo(PactDslWithProvider builder) {
+    public V4Pact executeGetUserInfo(PactDslWithProvider builder) {
 
         Map<String, Object> params = new HashMap<>();
         params.put("redirect_uri", "http://www.dummy-pact-service.com/callback");
@@ -71,22 +70,21 @@ public class IdamClientConsumerTest {
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .body(createUserInfoResponse())
-                .toPact();
+                .toPact()
+                .asV4Pact()
+                .get();
     }
 
 
     @Pact(consumer = "idamClient")
-    public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder)  {
-
-        String[] rolesArray = new String[1];
-        rolesArray[0] = "citizen";
+    public V4Pact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder)  {
 
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         params.put("email", "emCaseOfficer@email.net");
         params.put("password", "Password123");
         params.put("forename","emCaseOfficer");
         params.put("surname", "jar123");
-        params.put("roles", rolesArray);
+        params.put("roles", List.of("citizen"));
 
         return builder
                 .given("a user exists", params)
@@ -99,11 +97,13 @@ public class IdamClientConsumerTest {
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .body(createAuthResponse())
-                .toPact();
+                .toPact()
+                .asV4Pact()
+                .get();
     }
 
     @Test
-    @PactTestFor(pactMethod = "executeGetUserInfo", providerType = ProviderType.ASYNCH)
+    @PactTestFor(pactMethod = "executeGetUserInfo")
     void verifyUserInfo() {
         UserInfo actualUserInfo = idamClient.getUserInfo(BEARER_TOKEN);
 
@@ -111,7 +111,7 @@ public class IdamClientConsumerTest {
                 .familyName("Smith")
                 .givenName("John")
                 .name("John Smith")
-                .roles(Lists.newArrayList("caseworker-publiclaw-solicitor"))
+                .roles(List.of("caseworker-publiclaw-solicitor"))
                 .sub("damian@swansea.gov.uk")
                 .uid("33dff5a7-3b6f-45f1-b5e7-5f9be1ede355")
                 .build();
@@ -121,7 +121,7 @@ public class IdamClientConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200", providerType = ProviderType.ASYNCH)
+    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
     void verifyGetAccessTokenPact() {
 
         String returnedAccessToken = idamClient.getAccessToken("emCaseOfficer@email.net", "Password123");
