@@ -116,8 +116,7 @@ public class IdamClientConsumerTest {
                 .uid("33dff5a7-3b6f-45f1-b5e7-5f9be1ede355")
                 .build();
 
-        assertThat(actualUserInfo)
-                .isEqualTo(expectedUserInfo);
+        assertThat(actualUserInfo).isEqualTo(expectedUserInfo);
     }
 
     @Test
