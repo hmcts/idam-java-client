@@ -140,7 +140,7 @@ publishing {
         maven(MavenPublication) {
             from components.java
             groupId project.group
-            artifactId 'idam-client'
+            artifactId 'idam-java-client'
             version project.version
 
             pom.withXml {
