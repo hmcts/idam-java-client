@@ -2,7 +2,6 @@ plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.4.4'
-    id 'com.jfrog.bintray' version '1.8.5'
     id 'com.github.ben-manes.versions' version '0.38.0'
     id 'org.owasp.dependencycheck' version '6.3.2'
     id 'java-library'
@@ -11,9 +10,9 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
 }
 
-def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
+def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
 
-group 'uk.gov.hmcts.reform'
+group 'com.github.hmcts'
 version buildNumber
 
 dependencyUpdates.resolutionStrategy {
@@ -65,7 +64,7 @@ compileTestJava {
 
 repositories {
     mavenLocal()
-    jcenter()
+    mavenCentral()
 }
 
 def versions = [
@@ -159,7 +158,7 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
             groupId project.group
-            artifactId 'idam-client'
+            artifactId 'idam-java-client'
             version project.version
 
             pom.withXml {
@@ -171,21 +170,14 @@ publishing {
             }
         }
     }
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['Main']
-    publish = true
-    pkg {
-        repo = 'hmcts-maven'
-        name = 'idam-client'
-        userOrg = 'hmcts'
-        licenses = ['MIT']
-        vcsUrl = gitRepo
-        version {
-            name = project.version
+    repositories {
+        maven {
+            name = "AzureArtifacts"
+            url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+            credentials {
+                username = System.getenv("AZURE_DEVOPS_ARTIFACT_USERNAME")
+                password = System.getenv("AZURE_DEVOPS_ARTIFACT_TOKEN")
+            }
         }
     }
 }
