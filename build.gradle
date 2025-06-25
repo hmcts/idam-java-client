@@ -2,7 +2,6 @@ plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'org.springframework.boot' version '2.7.3'
-    id 'com.jfrog.bintray' version '1.8.5'
     id 'com.github.ben-manes.versions' version '0.42.0'
     id 'org.owasp.dependencycheck' version '7.1.2'
     id 'java-library'
@@ -10,9 +9,9 @@ plugins {
     id 'au.com.dius.pact' version '4.3.14'
 }
 
-def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
+def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
 
-group 'uk.gov.hmcts.reform'
+group 'com.github.hmcts'
 version buildNumber
 
 dependencyUpdates.resolutionStrategy {
@@ -157,6 +156,16 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            name = "AzureArtifacts"
+            url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+            credentials {
+                username = System.getenv("AZURE_DEVOPS_ARTIFACT_USERNAME")
+                password = System.getenv("AZURE_DEVOPS_ARTIFACT_TOKEN")
+            }
+        }
+    }
 }
 
 ext {
@@ -174,8 +183,8 @@ dependencyManagement {
 }
 
 dependencies {
-    api group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
-    api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    api 'org.springframework.cloud:spring-cloud-starter-openfeign:3.0.1'
+    api 'org.springframework.boot:spring-boot-starter-actuator:2.7.3'
     api group: 'io.github.openfeign', name: 'feign-jackson', version: '11.9.1'
     api group: 'io.github.openfeign', name: 'feign-httpclient', version: '11.9.1'
 
