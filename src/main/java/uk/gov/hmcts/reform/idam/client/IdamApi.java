@@ -36,12 +36,14 @@ public interface IdamApi {
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
+    @Deprecated
     @PostMapping("/pin")
     GeneratePinResponse generatePin(
         GeneratePinRequest requestBody,
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
+    @Deprecated
     @GetMapping(
         value = "/pin",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
