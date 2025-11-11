@@ -116,10 +116,12 @@ public class IdamClient {
         return idamApi.exchangeCode(exchangeCodeRequest);
     }
 
+    @Deprecated
     public GeneratePinResponse generatePin(GeneratePinRequest pinRequest, String authorization) {
         return idamApi.generatePin(pinRequest, authorization);
     }
 
+    @Deprecated
     public AuthenticateUserResponse authenticatePinUser(String pin, String state)
         throws UnsupportedEncodingException {
         AuthenticateUserResponse pinUserCode;
