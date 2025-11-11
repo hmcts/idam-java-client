@@ -182,7 +182,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '4.3.0'
 
-    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.6.17'
+    testContractImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: '4.6.18'
     testContractImplementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.13.0'
 
     testContractImplementation sourceSets.main.runtimeClasspath
