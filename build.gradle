@@ -7,7 +7,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '12.1.3'
     id 'java-library'
     id 'maven-publish'
-    id 'au.com.dius.pact' version '4.6.17'
+    id 'au.com.dius.pact' version '4.6.18'
 }
 
 def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
