@@ -12,6 +12,7 @@ All methods provided by this library are now deprecated in idam-api, except for 
 The OpenId methods in this library (listed below) can be replaced by standard OpenId/OAuth2 libraries, for example passport, express-openid-connect or Spring Security. 
 * IdamClient.getUserInfo
 * IdamClient.getAccessToken (password grant)
+* IdamApi.generateOpenIdToken (mostly/always password grants)
 
 Note that getAccessToken makes a password grant call which is deprecated in OAuth2, but still widely used. Password grants are available in Spring Security, but CFT IdAM provide auto configuration to make integrating them easier in https://github.com/hmcts/idam-legacy-auth-support
 
