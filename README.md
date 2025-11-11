@@ -7,14 +7,16 @@ This is a client library for interacting with the CFT IdAM application.
 
 All methods provided by this library are now deprecated in idam-api, except for the OpenId and v1 user methods. For those calls there are preferred alternatives listed below.
 
-## Alternatives for OpenId
+## Alternatives for OpenId calls
 
 The OpenId methods in this library (listed below) can be replaced by standard OpenId/OAuth2 libraries, for example passport, express-openid-connect or Spring Security. 
 * IdamClient.getUserInfo
 * IdamClient.getAccessToken (password grant)
 * IdamApi.generateOpenIdToken (mostly/always password grants)
 
-Note that getAccessToken makes a password grant call which is deprecated in OAuth2, but still widely used. Password grants are available in Spring Security, but CFT IdAM provide auto configuration to make integrating them easier in https://github.com/hmcts/idam-legacy-auth-support
+Note that getAccessToken makes a password grant call which is deprecated in OAuth2, but still widely used. Password grants are available in Spring Security, but CFT IdAM provide auto configuration to make integrating them easier in https://github.com/hmcts/idam-legacy-auth-support. 
+
+The key benefit of using Spring to handle password grants is that you don't need to implement your own token caching/refresh mechanism.
 
 ## Alternatives for idam-api v1 user calls
 
