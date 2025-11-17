@@ -3,7 +3,26 @@
 [![Build Status](https://travis-ci.com/hmcts/idam-java-client.svg?branch=master)](https://travis-ci.com/hmcts/idam-java-client)
 [ ![Download](https://api.bintray.com/packages/hmcts/hmcts-maven/idam-client/images/download.svg) ](https://bintray.com/hmcts/hmcts-maven/idam-client/_latestVersion)
 
-This is a client library for interacting with the idam application.
+This is a client library for interacting with the CFT IdAM application.
+
+All methods provided by this library are now deprecated in idam-api, except for the OpenId and v1 user methods. For those calls there are preferred alternatives listed below.
+
+## Alternatives for OpenId calls
+
+The OpenId methods in this library (listed below) can be replaced by standard OpenId/OAuth2 libraries, for example passport, express-openid-connect or Spring Security. 
+* IdamClient.getUserInfo
+* IdamClient.getAccessToken (password grant)
+* IdamApi.generateOpenIdToken (mostly/always password grants)
+
+Note that getAccessToken makes a password grant call which is deprecated in OAuth2, but still widely used. Password grants are available in Spring Security, but CFT IdAM provide auto configuration to make integrating them easier in https://github.com/hmcts/idam-legacy-auth-support. 
+
+The key benefit of using Spring to handle password grants is that you don't need to implement your own token caching/refresh mechanism.
+
+## Alternatives for idam-api v1 user calls
+
+The v1 idam-api methods in this library (listed below) are available, along with the full set of v1 user endpoints, in https://github.com/hmcts/idam-user-management-api-client
+* IdamClient.getUserByUserId
+* IdamClient.searchUsers
 
 ## Getting started
 
@@ -29,6 +48,8 @@ dependencies {
 ## Usage
 
 Add the library as a dependency of your project and configure the spring application to scan for Feign clients in the `uk.gov.hmcts.reform.idam` package:
+
+Note that the example below using authenticateUser (deprecated) is not appropriate for production code, which should be using OpenId endpoints for authentication.
 
 ```java
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam"})
