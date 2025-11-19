@@ -206,6 +206,10 @@ pact {
     }
 }
 
+tasks.withType(au.com.dius.pact.provider.gradle.PactPublishTask) {
+    pactPublish = pact.publish
+}
+
 bootJar {
     enabled = false
 }
