@@ -126,7 +126,8 @@ task runAndPublishConsumerPactTests(type: Test){
     useJUnitPlatform()
     testClassesDirs = sourceSets.testContract.output.classesDirs
     classpath = sourceSets.testContract.runtimeClasspath
-    finalizedBy(pactPublish)
+    // Temporarily prevent pactPublish task
+    // finalizedBy(pactPublish)
 }
 
 
