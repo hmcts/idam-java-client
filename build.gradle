@@ -126,8 +126,7 @@ task runAndPublishConsumerPactTests(type: Test){
     useJUnitPlatform()
     testClassesDirs = sourceSets.testContract.output.classesDirs
     classpath = sourceSets.testContract.runtimeClasspath
-    // Temporarily prevent pactPublish task
-    // finalizedBy(pactPublish)
+    finalizedBy(pactPublish)
 }
 
 
@@ -201,7 +200,7 @@ test {
 pact {
     publish {
         pactDirectory = 'build/pacts'
-        pactBrokerUrl = System.getProperty("pact.broker.url") ?: 'http://localhost:80'
+        pactBrokerUrl = project.hasProperty('pact.broker.url') ? project.property('pact.broker.url') : 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         consumerVersion = System.getenv("PACT_CONSUMER_VERSION") ?: System.getenv("BUILD_NUMBER") ?: "dev"
     }
