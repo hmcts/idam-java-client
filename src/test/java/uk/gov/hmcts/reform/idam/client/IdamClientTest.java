@@ -12,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
 import uk.gov.hmcts.reform.idam.client.models.ExchangeCodeRequest;
 import uk.gov.hmcts.reform.idam.client.models.GeneratePinRequest;
@@ -47,7 +48,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootTest(classes = {IdamClient.class, IdamApi.class, OAuth2Configuration.class})
 @PropertySource(value = "classpath:application.yml")
 @EnableAutoConfiguration
-@AutoConfigureWireMock(port = 5050)
+@EnableWireMock(@ConfigureWireMock(port = 5050))
 public class IdamClientTest {
 
     private static final String BEARER = "Bearer ";
