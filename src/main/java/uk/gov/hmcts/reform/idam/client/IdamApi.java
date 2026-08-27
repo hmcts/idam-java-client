@@ -84,11 +84,21 @@ public interface IdamApi {
         @RequestBody ExchangeCodeRequest exchangeCodeRequest
     );
 
+    /**
+     * OIDC user info endpoint.
+     * @deprecated OIDC endpoints should be being handled in hmctsAccessApi
+     */
+    @Deprecated
     @GetMapping("/o/userinfo")
     UserInfo retrieveUserInfo(
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorisation
     );
 
+    /**
+     * OIDC token endpoint.
+     * @deprecated OIDC endpoints should be being handled in hmctsAccessApi
+     */
+    @Deprecated
     @PostMapping(
         value = "/o/token",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE

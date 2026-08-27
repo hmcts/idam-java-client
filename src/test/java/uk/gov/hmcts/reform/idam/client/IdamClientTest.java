@@ -45,7 +45,13 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
-@SpringBootTest(classes = {IdamClient.class, IdamApi.class, OAuth2Configuration.class})
+@SpringBootTest(
+    classes = {IdamClient.class, IdamApi.class, OAuth2Configuration.class},
+    properties = {
+        "hmcts.access.enabled=false",
+        "hmcts.access.url=http://localhost:5050"
+    }
+)
 @PropertySource(value = "classpath:application.yml")
 @EnableAutoConfiguration
 @EnableWireMock(@ConfigureWireMock(port = 5050))
@@ -348,6 +354,7 @@ public class IdamClientTest {
 
     private void stubForUserInfo(UserInfo userInfo) throws JsonProcessingException {
         stubFor(WireMock.get("/o/userinfo")
+            .withHeader(HttpHeaders.AUTHORIZATION, equalTo(BEARER + TOKEN))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)

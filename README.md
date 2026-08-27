@@ -43,7 +43,7 @@ dependencies {
 
 ### Prerequisites
 
-- [JDK 8](https://www.oracle.com/java)
+- [JDK 17](https://www.oracle.com/java)
 
 ## Usage
 
@@ -67,6 +67,14 @@ idam:
     id: client_id
     secret: 123456
     redirect_uri: https://localhost:3000/receiver 
+```
+
+If you are using hmcts-access / idam-public web for OIDC requests you will need to set `hmcts.access.url` and `hmcts.access.enabled=true`
+```yaml
+hmcts:
+  access:
+    enabled: true
+    url: http://localhost:8080
 ```
 
 A client (IdamClient) is provided for interacting with the IdamApi feign client to simplify the log in flow:
