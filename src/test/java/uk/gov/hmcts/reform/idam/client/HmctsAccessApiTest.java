@@ -36,13 +36,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
 @SpringBootTest(
     classes = {IdamClient.class, IdamApi.class, HmctsAccessApi.class, OAuth2Configuration.class},
-    properties = {
-        "hmcts.access.enabled=true",
-        "hmcts.access.url=http://localhost:5051",
-        "idam.client.id=bsp",
-        "idam.client.secret=123456",
-        "idam.client.redirect_uri=https://localhost:5000/receiver"
-    }
+    properties = { "hmcts.access.enabled=true" }
 )
 @EnableAutoConfiguration
 @EnableWireMock(@ConfigureWireMock(name = "hmcts-access", port = 5051))

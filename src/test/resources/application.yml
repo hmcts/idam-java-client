@@ -6,3 +6,8 @@ idam:
     id: 'bsp'
     secret: '123456'
     redirect_uri: 'https://localhost:5000/receiver'
+
+hmcts:
+  access:
+    enabled: false
+    url: 'http://localhost:5051'
