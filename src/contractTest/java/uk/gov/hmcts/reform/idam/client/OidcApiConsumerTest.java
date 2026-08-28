@@ -33,21 +33,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableAutoConfiguration
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-@PactTestFor(providerName = "Hmcts_access_api", port = "5051")
+@PactTestFor(providerName = "Oidc_api", port = "5051")
 @SpringBootTest(
     classes = {IdamClient.class, OAuth2Configuration.class},
-    properties = {
-        "hmcts.access.enabled=true",
-        "hmcts.access.url=http://localhost:5051"
-    }
+    properties = {"idam.oidc.use_oidc_api=true"}
 )
-public class HmctsAccessApiConsumerTest {
+public class OidcApiConsumerTest {
 
     public static final String TOKEN_REGEXP = "[a-zA-Z0-9._-]+";
     public static final String BEARER_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdeRre";
 
-    private static final String HMCTS_ACCESS_OPENID_TOKEN_URL = "/o/token";
-    private static final String HMCTS_ACCESS_OPENID_USERINFO_URL = "/o/userinfo";
+    private static final String OPENID_TOKEN_URL = "/o/token";
+    private static final String OPENID_USERINFO_URL = "/o/userinfo";
 
     @Autowired
     private IdamClient idamClient;
@@ -71,7 +68,7 @@ public class HmctsAccessApiConsumerTest {
 
         return builder.given("I have obtained an access_token as a user", params)
                 .uponReceiving("HMCTS Access returns user info to the client")
-                .path(HMCTS_ACCESS_OPENID_USERINFO_URL)
+                .path(OPENID_USERINFO_URL)
                 .headerFromProviderState("Authorization", "Bearer ${access_token}",
                         BEARER_TOKEN)
                 .method(HttpMethod.GET.toString())
@@ -96,7 +93,7 @@ public class HmctsAccessApiConsumerTest {
         return builder
                 .given("a user exists", params)
                 .uponReceiving("Provider takes user/pwd and returns token to Idam Client")
-                .path(HMCTS_ACCESS_OPENID_TOKEN_URL)
+                .path(OPENID_TOKEN_URL)
                 .method(HttpMethod.POST.toString())
                 .body("redirect_uri=https%3A%2F%2Flocalhost%3A5000%2Freceiver&client_id=pact&grant_type=password"
                         + "&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret"

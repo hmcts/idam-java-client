@@ -39,16 +39,16 @@ public class IdamClient {
     public static final String CODE = "code";
 
     private IdamApi idamApi;
-    private HmctsAccessApi hmctsAccessApi;
+    private OidcApi oidcApi;
     private OAuth2Configuration oauth2Configuration;
 
-    @Value("${hmcts.access.enabled:false}")
-    private boolean hmctsAccessEnabled;
+    @Value("${idam.oidc.use_oidc_api:false}")
+    private boolean useOidcApi;
 
     @Autowired
-    public IdamClient(IdamApi idamApi, HmctsAccessApi hmctsAccessApi, OAuth2Configuration oauth2Configuration) {
+    public IdamClient(IdamApi idamApi, OidcApi oidcApi, OAuth2Configuration oauth2Configuration) {
         this.idamApi = idamApi;
-        this.hmctsAccessApi = hmctsAccessApi;
+        this.oidcApi = oidcApi;
         this.oauth2Configuration = oauth2Configuration;
     }
 
@@ -65,8 +65,8 @@ public class IdamClient {
     // when using the access token you may need to add "Bearer "
     public TokenResponse getAccessTokenResponse(String username, String password) {
 
-        if (hmctsAccessEnabled) {
-            return hmctsAccessApi.generateOpenIdToken(
+        if (useOidcApi) {
+            return oidcApi.generateOpenIdToken(
                 new TokenRequest(
                     oauth2Configuration.getClientId(),
                     oauth2Configuration.getClientSecret(),
@@ -169,8 +169,8 @@ public class IdamClient {
     }
 
     public UserInfo getUserInfo(String bearerToken) {
-        if (hmctsAccessEnabled) {
-            return hmctsAccessApi.retrieveUserInfo(bearerToken);
+        if (useOidcApi) {
+            return oidcApi.retrieveUserInfo(bearerToken);
         }
         return idamApi.retrieveUserInfo(bearerToken);
     }

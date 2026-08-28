@@ -86,7 +86,7 @@ public interface IdamApi {
 
     /**
      * OIDC user info endpoint.
-     * @deprecated OIDC endpoints should be being handled in hmctsAccessApi
+     * @deprecated OIDC endpoints should be replaced by standard OpenId/OAuth2 libraries i.e. passport/express-openid-connect/Spring Security
      */
     @Deprecated
     @GetMapping("/o/userinfo")
@@ -96,7 +96,7 @@ public interface IdamApi {
 
     /**
      * OIDC token endpoint.
-     * @deprecated OIDC endpoints should be being handled in hmctsAccessApi
+     * @deprecated OIDC endpoints should be replaced by standard OpenId/OAuth2 libraries i.e. passport/express-openid-connect/Spring Security
      */
     @Deprecated
     @PostMapping(

@@ -7,7 +7,6 @@ idam:
     secret: 'pactsecret'
     scope: 'openid profile roles search-user'
     redirect_uri: 'https://localhost:5000/receiver'
-hmcts:
-  access:
+  oidc:
+    use_oidc_api: false
     url: 'http://localhost:5051'
-    enabled: false

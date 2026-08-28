@@ -35,12 +35,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.idam.client"})
 @SpringBootTest(
-    classes = {IdamClient.class, IdamApi.class, HmctsAccessApi.class, OAuth2Configuration.class},
-    properties = { "hmcts.access.enabled=true" }
+    classes = {IdamClient.class, IdamApi.class, OidcApi.class, OAuth2Configuration.class},
+    properties = { "idam.oidc.use_oidc_api=true" }
 )
 @EnableAutoConfiguration
 @EnableWireMock(@ConfigureWireMock(name = "hmcts-access", port = 5051))
-public class HmctsAccessApiTest {
+public class OidcApiTest {
 
     private static final String BEARER = "Bearer ";
     private static final String TOKEN = "hmcts-access-token";
@@ -54,7 +54,7 @@ public class HmctsAccessApiTest {
     private IdamClient idamClient;
 
     @MockitoSpyBean
-    private HmctsAccessApi hmctsAccessApi;
+    private OidcApi oidcApi;
 
     @MockitoBean
     private IdamApi idamApi;
@@ -77,7 +77,7 @@ public class HmctsAccessApiTest {
 
         assertThat(tokenResponse.accessToken).isEqualTo(TOKEN);
         verifyNoInteractions(idamApi);
-        verify(hmctsAccessApi).generateOpenIdToken(any(TokenRequest.class));
+        verify(oidcApi).generateOpenIdToken(any(TokenRequest.class));
     }
 
     @Test
@@ -100,6 +100,6 @@ public class HmctsAccessApiTest {
 
         assertThat(found).isEqualTo(userInfo);
         verifyNoInteractions(idamApi);
-        verify(hmctsAccessApi).retrieveUserInfo(any(String.class));
+        verify(oidcApi).retrieveUserInfo(any(String.class));
     }
 }

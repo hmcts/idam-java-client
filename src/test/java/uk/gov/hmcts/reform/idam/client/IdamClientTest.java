@@ -83,7 +83,7 @@ public class IdamClientTest {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
-    private HmctsAccessApi hmctsAccessApi;
+    private OidcApi oidcApi;
 
     @Autowired
     private IdamClient idamClient;
@@ -98,7 +98,7 @@ public class IdamClientTest {
 
     @AfterEach
     public void tearDown() {
-        verifyNoInteractions(hmctsAccessApi);
+        verifyNoInteractions(oidcApi);
     }
 
     @Test
