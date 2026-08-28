@@ -69,11 +69,11 @@ idam:
     redirect_uri: https://localhost:3000/receiver 
 ```
 
-If you are using hmcts-access / idam-public web for OIDC requests you will need to set `hmcts.access.url` and `hmcts.access.enabled=true`
+If you are using a seperate server for OIDC requests you will need to set `idam.oidc.url` and `idam.oidc.use_oidc_api=true`
 ```yaml
-hmcts:
-  access:
-    enabled: true
+idam:
+  oidc:
+    use_oidc_api: true
     url: http://localhost:8080
 ```
 

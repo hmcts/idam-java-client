@@ -39,11 +39,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
     properties = { "idam.oidc.use_oidc_api=true" }
 )
 @EnableAutoConfiguration
-@EnableWireMock(@ConfigureWireMock(name = "hmcts-access", port = 5051))
+@EnableWireMock(@ConfigureWireMock(name = "oidc-api", port = 5051))
 public class OidcApiTest {
 
     private static final String BEARER = "Bearer ";
-    private static final String TOKEN = "hmcts-access-token";
+    private static final String TOKEN = "oidc-access-token";
     private static final String USER_LOGIN = "user@example.com";
     private static final String USER_PASSWORD = "Password12";
     private static final String OPENID_TOKEN_RESULT = String.format(

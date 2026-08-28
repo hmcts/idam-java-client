@@ -10,7 +10,7 @@ plugins {
     id 'au.com.dius.pact' version '4.7.5'
 }
 
-def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
+def buildNumber = System.getenv("RELEASE_VERSION")?: "4.1.0-DEV-SNAPSHOT"
 
 group 'com.github.hmcts'
 version buildNumber
