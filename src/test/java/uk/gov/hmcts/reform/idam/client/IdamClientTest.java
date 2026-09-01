@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
 import feign.FeignException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.wiremock.spring.ConfigureWireMock;
 import org.wiremock.spring.EnableWireMock;
 import uk.gov.hmcts.reform.idam.client.models.AuthenticateUserResponse;
@@ -40,6 +42,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -79,6 +82,12 @@ public class IdamClientTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @MockitoBean
+    private OidcApi oidcApi;
+
+    @Autowired
+    private IdamClient idamClient;
+
     @BeforeEach
     public void setup() {
         pinRedirectUrl = redirectUri + "?code=" + PIN_AUTH_CODE;
@@ -87,8 +96,10 @@ public class IdamClientTest {
         objectMapper.registerModule(new Jdk8Module());
     }
 
-    @Autowired
-    private IdamClient idamClient;
+    @AfterEach
+    public void tearDown() {
+        verifyNoInteractions(oidcApi);
+    }
 
     @Test
     public void authenticateUser() {
@@ -348,6 +359,7 @@ public class IdamClientTest {
 
     private void stubForUserInfo(UserInfo userInfo) throws JsonProcessingException {
         stubFor(WireMock.get("/o/userinfo")
+            .withHeader(HttpHeaders.AUTHORIZATION, equalTo(BEARER + TOKEN))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
