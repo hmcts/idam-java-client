@@ -166,7 +166,7 @@ publishing {
 }
 
 ext {
-    lombokVersion = '1.18.40'
+    lombokVersion = '1.18.44'
 }
 
 dependencies {
@@ -177,6 +177,8 @@ dependencies {
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    // @Jacksonized (Jackson 3) emits tools.jackson.databind annotations; Boot consumers provide databind at runtime.
+    compileOnly group: 'tools.jackson.core', name: 'jackson-databind'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
