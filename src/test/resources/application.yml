@@ -6,3 +6,6 @@ idam:
     id: 'bsp'
     secret: '123456'
     redirect_uri: 'https://localhost:5000/receiver'
+  oidc:
+    use_oidc_api: false
+    url: 'http://localhost:5051'

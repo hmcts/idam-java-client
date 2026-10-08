@@ -10,7 +10,7 @@ plugins {
     id 'au.com.dius.pact' version '4.7.5'
 }
 
-def buildNumber = System.getenv("RELEASE_VERSION")?: "DEV-SNAPSHOT"
+def buildNumber = System.getenv("RELEASE_VERSION")?: "4.1.0-DEV-SNAPSHOT"
 
 group 'com.github.hmcts'
 version buildNumber
@@ -53,6 +53,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 compileJava {
@@ -66,12 +68,6 @@ compileTestJava {
 repositories {
     mavenLocal()
     mavenCentral()
-}
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
-    }
 }
 
 task printVersion {
@@ -127,12 +123,6 @@ task runAndPublishConsumerPactTests(type: Test){
     testClassesDirs = sourceSets.testContract.output.classesDirs
     classpath = sourceSets.testContract.runtimeClasspath
     finalizedBy(pactPublish)
-}
-
-
-java {
-    withSourcesJar()
-    withJavadocJar()
 }
 
 publishing {
@@ -216,6 +206,9 @@ bootJar {
 }
 
 jar {
+    manifest {
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
+    }
     enabled = true
     archiveClassifier = ''
 }
