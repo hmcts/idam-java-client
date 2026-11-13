@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.idam.client;
 import feign.Response;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,11 +39,16 @@ public class IdamClient {
     public static final String CODE = "code";
 
     private IdamApi idamApi;
+    private OidcApi oidcApi;
     private OAuth2Configuration oauth2Configuration;
 
+    @Value("${idam.oidc.use_oidc_api:false}")
+    private boolean useOidcApi;
+
     @Autowired
-    public IdamClient(IdamApi idamApi, OAuth2Configuration oauth2Configuration) {
+    public IdamClient(IdamApi idamApi, OidcApi oidcApi, OAuth2Configuration oauth2Configuration) {
         this.idamApi = idamApi;
+        this.oidcApi = oidcApi;
         this.oauth2Configuration = oauth2Configuration;
     }
 
@@ -58,6 +64,22 @@ public class IdamClient {
 
     // when using the access token you may need to add "Bearer "
     public TokenResponse getAccessTokenResponse(String username, String password) {
+
+        if (useOidcApi) {
+            return oidcApi.generateOpenIdToken(
+                new TokenRequest(
+                    oauth2Configuration.getClientId(),
+                    oauth2Configuration.getClientSecret(),
+                    OPENID_GRANT_TYPE,
+                    oauth2Configuration.getRedirectUri(),
+                    username,
+                    password,
+                    oauth2Configuration.getClientScope(),
+                    null,
+                    null
+                ));
+        }
+
         return idamApi.generateOpenIdToken(
             new TokenRequest(
                 oauth2Configuration.getClientId(),
@@ -147,6 +169,9 @@ public class IdamClient {
     }
 
     public UserInfo getUserInfo(String bearerToken) {
+        if (useOidcApi) {
+            return oidcApi.retrieveUserInfo(bearerToken);
+        }
         return idamApi.retrieveUserInfo(bearerToken);
     }
 
